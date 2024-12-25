@@ -8,10 +8,11 @@ import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
-import { ThisEnvironment } from '../interfaces';
+import { MyAppVersions, ThisEnvironment } from '../interfaces';
 
 interface CloudFrontDistributionStackProps extends StackProps {
   env: ThisEnvironment;
+  versions: MyAppVersions;
 }
 
 export class CloudFrontDistributionStack extends Stack {
@@ -19,6 +20,7 @@ export class CloudFrontDistributionStack extends Stack {
     super(scope, id, props);
 
     const subDomain = 'driversync';
+    const version = props.versions.driver.frontend;
 
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
       domainName: props.env.domainName,
@@ -62,6 +64,8 @@ export class CloudFrontDistributionStack extends Stack {
           assetHash: AssetHashType.SOURCE,
           ignoreMode: IgnoreMode.GIT,
         }),
+        Source.data('/assets/settings.js', `window.appSettings = {\'version\': \'${version}\'};`),
+        Source.jsonData('/assets/settings.json', { semver: version }),
       ],
       destinationBucket: webSiteBucket,
       distributionPaths: ['/*'],

@@ -3,6 +3,7 @@ import { ShellStep } from 'aws-cdk-lib/pipelines';
 import { AwsCredentials, GitHubWorkflow } from 'cdk-pipelines-github';
 import { Construct } from 'constructs';
 import { MyAppStage } from './MyAppStage';
+import * as versions from '../ci/versions';
 import {
   driverFECheckoutStep,
   GH_SUPPORT_DEPLOY_ROLE_NAME,
@@ -10,7 +11,11 @@ import {
   PROD_ACCOUNT,
   STAGE_ACCOUNT,
 } from '../constants';
+import { MyAppVersions } from '../interfaces';
 
+const myAppVersions: MyAppVersions = {
+  driver: { frontend: versions.DriverFrontend['driver-frontend'] },
+};
 
 export class PipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
@@ -35,6 +40,7 @@ export class PipelineStack extends Stack {
         region: PRIMARY_REGION,
         domainName: 'stage.prettysolution.com',
       },
+      versions: myAppVersions,
     });
     stagePipeline.addStageWithGitHubOptions(stage);
 
@@ -60,6 +66,7 @@ export class PipelineStack extends Stack {
         region: PRIMARY_REGION,
         domainName: 'prettysolution.com',
       },
+      versions: myAppVersions,
     });
     prodPipeline.addStageWithGitHubOptions(prod);
   }
