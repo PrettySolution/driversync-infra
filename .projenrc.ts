@@ -1,6 +1,6 @@
 import { awscdk } from 'projen';
 import { GithubCredentials } from 'projen/lib/github';
-import { driverFECheckoutSTAGE } from './src/constants';
+import { driverFECheckoutStep } from './src/constants';
 
 
 const project = new awscdk.AwsCdkTypeScriptApp({
@@ -12,7 +12,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   githubOptions: {
     projenCredentials: GithubCredentials.fromApp(),
   },
-  workflowBootstrapSteps: [driverFECheckoutSTAGE],
+  workflowBootstrapSteps: [driverFECheckoutStep],
   release: false,
   deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc'], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
