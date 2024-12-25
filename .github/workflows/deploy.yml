@@ -152,6 +152,64 @@ jobs:
         name: Publish Assets-FileAsset4
         run: /bin/bash
           ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset4-step.sh
+  Assets-FileAsset5:
+    name: Publish Assets Assets-FileAsset5
+    needs:
+      - Build-Build
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    outputs:
+      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
+    steps:
+      - name: Download cdk.out
+        uses: actions/download-artifact@v4
+        with:
+          name: cdk.out
+          path: cdk.out
+      - name: Install
+        run: npm install --no-save cdk-assets
+      - name: Authenticate Via OIDC Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-duration-seconds: 1800
+          role-skip-session-tagging: true
+          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
+      - id: Publish
+        name: Publish Assets-FileAsset5
+        run: /bin/bash
+          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset5-step.sh
+  Assets-FileAsset6:
+    name: Publish Assets Assets-FileAsset6
+    needs:
+      - Build-Build
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    outputs:
+      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
+    steps:
+      - name: Download cdk.out
+        uses: actions/download-artifact@v4
+        with:
+          name: cdk.out
+          path: cdk.out
+      - name: Install
+        run: npm install --no-save cdk-assets
+      - name: Authenticate Via OIDC Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-west-2
+          role-duration-seconds: 1800
+          role-skip-session-tagging: true
+          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
+      - id: Publish
+        name: Publish Assets-FileAsset6
+        run: /bin/bash
+          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset6-step.sh
   driver-stage-CloudFrontDistribution-Deploy:
     name: Deploy ghpipelinedriverstageCloudFrontDistribution4C848E9D
     permissions:
@@ -163,6 +221,8 @@ jobs:
       - Assets-FileAsset2
       - Assets-FileAsset3
       - Assets-FileAsset4
+      - Assets-FileAsset5
+      - Assets-FileAsset6
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate Via OIDC Role
