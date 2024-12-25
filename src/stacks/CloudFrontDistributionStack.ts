@@ -66,7 +66,7 @@ export class CloudFrontDistributionStack extends Stack {
           ignoreMode: IgnoreMode.GIT,
         }),
         Source.data('/assets/settings.js', `window.appSettings = {\'version\': \'${version}\'};`),
-        Source.jsonData('/assets/settings.json', { semver: version }),
+        Source.jsonData('/assets/settings.json', { version: version }),
       ],
       destinationBucket: webSiteBucket,
       distributionPaths: ['/*'],
