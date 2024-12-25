@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { AssetHashType, DockerImage, Duration, IgnoreMode, Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -50,7 +50,18 @@ export class CloudFrontDistributionStack extends Stack {
 
     new BucketDeployment(this, 'BucketDeployment', {
       sources: [
-        Source.asset(path.join(process.cwd(), 'website')),
+        Source.asset(path.join(process.cwd(), '../driver-frontend'), {
+          bundling: {
+            image: DockerImage.fromRegistry('public.ecr.aws/docker/library/node:20.18.1'),
+            user: 'root:root',
+            command: ['sh', '-c', 'npm i && npm run build && cp -R ./dist/* /asset-output/'],
+            environment: {
+              REACT_APP_HELLO: 'World',
+            },
+          },
+          assetHash: AssetHashType.SOURCE,
+          ignoreMode: IgnoreMode.GIT,
+        }),
       ],
       destinationBucket: webSiteBucket,
       distributionPaths: ['/*'],
