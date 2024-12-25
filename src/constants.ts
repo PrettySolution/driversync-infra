@@ -1,5 +1,5 @@
 import { JobStep } from 'cdk-pipelines-github';
-// import * as versions from './ci/versions';
+import * as versions from './ci/versions';
 
 export const MANAGEMENT_ACCOUNT = '536309290949';
 export const PROD_ACCOUNT = '268591637005';
@@ -10,23 +10,14 @@ export const SECONDARY_REGION = 'us-west-2';
 export const CONNECTION_ARN = 'arn:aws:codestar-connections:us-east-1:536309290949:connection/8db45fc6-a823-4980-b94d-a7dcf69cfe99';
 export const GH_SUPPORT_DEPLOY_ROLE_NAME = 'GithubSupport-DeployRole';
 
-export const driverFECheckoutSTAGE: JobStep = {
+export const driverFECheckoutStep: JobStep = {
   name: 'Clone driver-frontend',
   uses: 'actions/checkout@v4',
   with: {
     repository: 'prettysolution/driver-frontend',
     path: 'driver-frontend',
-    token: '${{ secrets.PRETTY_READ_PAT }}',
-  },
-};
-export const driverFECheckoutPROD: JobStep = {
-  name: 'Clone driver-frontend',
-  uses: 'actions/checkout@v4',
-  with: {
-    repository: 'prettysolution/driver-frontend',
-    path: 'driver-frontend',
-    // ref: `refs/tags/${versions.DriverFrontend['driver-frontend']}`,
-    ref: 'refs/heads/prod',
+    ref: `refs/tags/${versions.DriverFrontend['driver-frontend']}`,
+    // ref: 'refs/heads/prod',
     token: '${{ secrets.PRETTY_READ_PAT }}',
   },
 };

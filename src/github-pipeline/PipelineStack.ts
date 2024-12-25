@@ -4,8 +4,7 @@ import { AwsCredentials, GitHubWorkflow } from 'cdk-pipelines-github';
 import { Construct } from 'constructs';
 import { MyAppStage } from './MyAppStage';
 import {
-  driverFECheckoutPROD,
-  driverFECheckoutSTAGE,
+  driverFECheckoutStep,
   GH_SUPPORT_DEPLOY_ROLE_NAME,
   PRIMARY_REGION,
   PROD_ACCOUNT,
@@ -28,7 +27,7 @@ export class PipelineStack extends Stack {
       awsCreds: AwsCredentials.fromOpenIdConnect({
         gitHubActionRoleArn: `arn:aws:iam::${STAGE_ACCOUNT}:role/${GH_SUPPORT_DEPLOY_ROLE_NAME}`,
       }),
-      preBuildSteps: [driverFECheckoutSTAGE],
+      preBuildSteps: [driverFECheckoutStep],
     });
     const stage = new MyAppStage(this, 'driver-stage', {
       env: {
@@ -53,7 +52,7 @@ export class PipelineStack extends Stack {
       workflowPath: '.github/workflows/deploy-prod.yml',
       workflowName: 'deploy-prod',
       workflowTriggers: { push: { branches: ['prod'] } },
-      preBuildSteps: [driverFECheckoutPROD],
+      preBuildSteps: [driverFECheckoutStep],
     });
     const prod = new MyAppStage(this, 'driver-prod', {
       env: {
