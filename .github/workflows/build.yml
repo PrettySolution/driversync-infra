@@ -19,6 +19,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - name: Clone driver-frontend
+        uses: actions/checkout@v4
+        with:
+          repository: prettysolution/driver-frontend
+          path: driver-frontend
+          token: ${{ secrets.PRETTY_READ_PAT }}
       - name: Install dependencies
         run: yarn install --check-files
       - name: build

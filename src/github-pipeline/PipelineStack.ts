@@ -3,7 +3,14 @@ import { ShellStep } from 'aws-cdk-lib/pipelines';
 import { AwsCredentials, GitHubWorkflow } from 'cdk-pipelines-github';
 import { Construct } from 'constructs';
 import { MyAppStage } from './MyAppStage';
-import { GH_SUPPORT_DEPLOY_ROLE_NAME, PRIMARY_REGION, PROD_ACCOUNT, STAGE_ACCOUNT } from '../constants';
+import {
+  driverFECheckoutPROD,
+  driverFECheckoutSTAGE,
+  GH_SUPPORT_DEPLOY_ROLE_NAME,
+  PRIMARY_REGION,
+  PROD_ACCOUNT,
+  STAGE_ACCOUNT,
+} from '../constants';
 
 
 export class PipelineStack extends Stack {
@@ -21,18 +28,7 @@ export class PipelineStack extends Stack {
       awsCreds: AwsCredentials.fromOpenIdConnect({
         gitHubActionRoleArn: `arn:aws:iam::${STAGE_ACCOUNT}:role/${GH_SUPPORT_DEPLOY_ROLE_NAME}`,
       }),
-      preBuildSteps: [
-        {
-          name: 'Clone driver-frontend',
-          uses: 'actions/checkout@v4',
-          with: {
-            repository: 'prettysolution/driver-frontend',
-            path: 'driver-frontend',
-            // ref: 'refs/heads/prod',
-            token: '${{ secrets.PRETTY_READ_PAT }}',
-          },
-        },
-      ],
+      preBuildSteps: [driverFECheckoutSTAGE],
     });
     const stage = new MyAppStage(this, 'driver-stage', {
       env: {
@@ -57,18 +53,7 @@ export class PipelineStack extends Stack {
       workflowPath: '.github/workflows/deploy-prod.yml',
       workflowName: 'deploy-prod',
       workflowTriggers: { push: { branches: ['prod'] } },
-      preBuildSteps: [
-        {
-          name: 'Clone driver-frontend',
-          uses: 'actions/checkout@v4',
-          with: {
-            repository: 'prettysolution/driver-frontend',
-            path: 'driver-frontend',
-            ref: 'refs/heads/prod',
-            token: '${{ secrets.PRETTY_READ_PAT }}',
-          },
-        },
-      ],
+      preBuildSteps: [driverFECheckoutPROD],
     });
     const prod = new MyAppStage(this, 'driver-prod', {
       env: {
