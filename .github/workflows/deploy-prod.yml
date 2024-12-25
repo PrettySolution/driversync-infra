@@ -18,6 +18,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Clone driver-frontend
+        uses: actions/checkout@v4
+        with:
+          repository: prettysolution/driver-frontend
+          path: driver-frontend
+          ref: refs/heads/prod
+          token: ${{ secrets.PRETTY_READ_PAT }}
       - name: Build
         run: |-
           yarn install

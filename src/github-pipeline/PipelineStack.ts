@@ -21,6 +21,18 @@ export class PipelineStack extends Stack {
       awsCreds: AwsCredentials.fromOpenIdConnect({
         gitHubActionRoleArn: `arn:aws:iam::${STAGE_ACCOUNT}:role/${GH_SUPPORT_DEPLOY_ROLE_NAME}`,
       }),
+      preBuildSteps: [
+        {
+          name: 'Clone driver-frontend',
+          uses: 'actions/checkout@v4',
+          with: {
+            repository: 'prettysolution/driver-frontend',
+            path: 'driver-frontend',
+            // ref: 'refs/heads/prod',
+            token: '${{ secrets.PRETTY_READ_PAT }}',
+          },
+        },
+      ],
     });
     const stage = new MyAppStage(this, 'driver-stage', {
       env: {
@@ -45,6 +57,18 @@ export class PipelineStack extends Stack {
       workflowPath: '.github/workflows/deploy-prod.yml',
       workflowName: 'deploy-prod',
       workflowTriggers: { push: { branches: ['prod'] } },
+      preBuildSteps: [
+        {
+          name: 'Clone driver-frontend',
+          uses: 'actions/checkout@v4',
+          with: {
+            repository: 'prettysolution/driver-frontend',
+            path: 'driver-frontend',
+            ref: 'refs/heads/prod',
+            token: '${{ secrets.PRETTY_READ_PAT }}',
+          },
+        },
+      ],
     });
     const prod = new MyAppStage(this, 'driver-prod', {
       env: {

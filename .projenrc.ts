@@ -6,7 +6,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   defaultReleaseBranch: 'main',
   name: 'driver-infrastructure',
   projenrcTs: true,
-  gitignore: ['.idea'],
+  gitignore: ['.idea', 'driver-frontend'],
   githubOptions: {
     projenCredentials: GithubCredentials.fromApp(),
   },
