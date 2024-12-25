@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Clone driver-frontend
+      - name: Checkout driver-frontend
         uses: actions/checkout@v4
         with:
           repository: prettysolution/driver-frontend
