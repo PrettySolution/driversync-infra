@@ -54,7 +54,8 @@ export class CloudFrontDistributionStack extends Stack {
       sources: [
         Source.asset(path.join(process.cwd(), 'driver-frontend'), {
           bundling: {
-            image: DockerImage.fromRegistry('public.ecr.aws/docker/library/node:20.18.1'),
+            // image: DockerImage.fromRegistry('public.ecr.aws/docker/library/node:20.18.1'),
+            image: DockerImage.fromRegistry('node:20.18.1'),
             user: 'root:root',
             command: ['sh', '-c', 'npm i && npm run build && cp -R ./dist/* /asset-output/'],
             environment: {
