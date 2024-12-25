@@ -1,4 +1,5 @@
 import { JobStep } from 'cdk-pipelines-github';
+// import * as versions from './ci/versions';
 
 export const MANAGEMENT_ACCOUNT = '536309290949';
 export const PROD_ACCOUNT = '268591637005';
@@ -24,6 +25,7 @@ export const driverFECheckoutPROD: JobStep = {
   with: {
     repository: 'prettysolution/driver-frontend',
     path: 'driver-frontend',
+    // ref: `refs/tags/${versions.DriverFrontend['driver-frontend']}`,
     ref: 'refs/heads/prod',
     token: '${{ secrets.PRETTY_READ_PAT }}',
   },
