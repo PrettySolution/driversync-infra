@@ -16,8 +16,7 @@ export const driverFECheckoutStep: JobStep = {
   with: {
     repository: 'prettysolution/driver-frontend',
     path: 'driver-frontend',
-    ref: `refs/tags/${versions.DriverFrontend['driver-frontend']}`,
-    // ref: 'refs/heads/prod',
+    ref: versions.DriverFrontend['driver-frontend'],
     token: '${{ secrets.PRETTY_READ_PAT }}',
   },
 };
