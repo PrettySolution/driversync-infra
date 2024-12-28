@@ -17,7 +17,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   release: false,
   // autoMergeOptions: { approvedReviews: 0 },
   // autoMerge: true,
-  autoApproveOptions: { allowedUsernames: ['prettysolution'] },
+  autoApproveOptions: { allowedUsernames: ['prettysolution[bot]'] },
   autoApproveUpgrades: true,
   deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc'], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
@@ -29,5 +29,3 @@ const driverFrontCommitId = execSync('git -C driver-frontend rev-parse --short H
 new JsonFile(project, 'src/ci/driver-frontend-dynamic.json', { obj: { commitId: driverFrontCommitId } });
 
 project.synth();
-
-
