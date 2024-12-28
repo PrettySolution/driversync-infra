@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { AssetHashType, DockerImage, Duration, IgnoreMode, Stack, StackProps } from 'aws-cdk-lib';
+import { DockerImage, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -62,8 +62,8 @@ export class CloudFrontDistributionStack extends Stack {
               REACT_APP_HELLO: 'World',
             },
           },
-          assetHash: AssetHashType.SOURCE,
-          ignoreMode: IgnoreMode.GIT,
+          // assetHash: AssetHashType.SOURCE,
+          // ignoreMode: IgnoreMode.GIT,
         }),
         Source.data('/assets/settings.js', `window.appSettings = {\'version\': \'${version}\'};`),
         Source.jsonData('/assets/settings.json', { version: version }),
