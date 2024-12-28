@@ -24,7 +24,7 @@ jobs:
         with:
           repository: prettysolution/driver-frontend
           path: driver-frontend
-          ref: refs/tags/v0.0.0
+          ref: main
           token: ${{ secrets.PRETTY_READ_PAT }}
       - name: Build
         run: |-
