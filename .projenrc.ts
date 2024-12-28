@@ -10,19 +10,15 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   name: 'driver-infrastructure',
   projenrcTs: true,
   gitignore: ['.idea', 'driver-frontend'],
-  githubOptions: {
-    projenCredentials: GithubCredentials.fromApp(),
-  },
-  workflowBootstrapSteps: [driverFECheckoutStep],
+  githubOptions: { projenCredentials: GithubCredentials.fromApp() },
   release: false,
-  // autoMergeOptions: { approvedReviews: 0 },
-  // autoMerge: true,
+
+  deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc'], /* Runtime dependencies of this module. */
+  devDeps: ['cdk-dia'], /* Build dependencies for this module. */
+
+  workflowBootstrapSteps: [driverFECheckoutStep],
   autoApproveOptions: { allowedUsernames: ['prettysolution[bot]'], secret: 'PR_AUTO_APPROVE' },
   autoApproveUpgrades: true,
-  deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc'], /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  devDeps: ['cdk-dia'], /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
 });
 
 const driverFrontCommitId = execSync('git -C driver-frontend rev-parse --short HEAD').toString().trim();
