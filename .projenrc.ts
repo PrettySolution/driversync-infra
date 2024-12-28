@@ -17,7 +17,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   release: false,
   // autoMergeOptions: { approvedReviews: 0 },
   // autoMerge: true,
-  autoApproveOptions: { allowedUsernames: ['prettysolution[bot]'] },
+  autoApproveOptions: { allowedUsernames: ['prettysolution[bot]'], secret: 'PR_AUTO_APPROVE' },
   autoApproveUpgrades: true,
   deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc'], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
