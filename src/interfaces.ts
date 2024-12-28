@@ -5,5 +5,5 @@ export interface ThisEnvironment extends Environment {
 }
 
 export interface MyAppVersions {
-  driver: { frontend: string };
+  driver: { frontend: {version: string; commitId: string} };
 }

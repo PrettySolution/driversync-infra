@@ -14,7 +14,9 @@ import {
 import { MyAppVersions } from '../interfaces';
 
 const myAppVersions: MyAppVersions = {
-  driver: { frontend: versions.DriverFrontend['driver-frontend'] },
+  driver: {
+    frontend: { version: versions.DriverFrontend['driver-frontend'], commitId: versions.DriverFrontendDynamic.commitId },
+  },
 };
 
 export class PipelineStack extends Stack {

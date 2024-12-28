@@ -20,7 +20,8 @@ export class CloudFrontDistributionStack extends Stack {
     super(scope, id, props);
 
     const subDomain = 'driversync';
-    const version = props.versions.driver.frontend;
+    const version = props.versions.driver.frontend.version;
+    const commitId = props.versions.driver.frontend.commitId;
 
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
       domainName: props.env.domainName,
@@ -65,8 +66,8 @@ export class CloudFrontDistributionStack extends Stack {
           // assetHash: AssetHashType.SOURCE,
           // ignoreMode: IgnoreMode.GIT,
         }),
-        Source.data('/assets/settings.js', `window.appSettings = {\'version\': \'${version}\'};`),
-        Source.jsonData('/assets/settings.json', { version: version }),
+        Source.data('/assets/settings.js', `window.appSettings = {\'version\': \'${version}\', \'commitId\': \'${commitId}\'};`),
+        Source.jsonData('/assets/settings.json', { version: version, commitId: commitId }),
       ],
       destinationBucket: webSiteBucket,
       distributionPaths: ['/*'],

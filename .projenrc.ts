@@ -1,4 +1,5 @@
-import { awscdk } from 'projen';
+import { execSync } from 'node:child_process';
+import { awscdk, JsonFile } from 'projen';
 import { GithubCredentials } from 'projen/lib/github';
 import { driverFECheckoutStep } from './src/constants';
 
@@ -19,6 +20,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   devDeps: ['cdk-dia'], /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
+
+const driverFrontCommitId = execSync('git -C driver-frontend rev-parse --short HEAD').toString().trim();
+new JsonFile(project, 'src/ci/driver-frontend-dynamic.json', { obj: { commitId: driverFrontCommitId } });
+
 project.synth();
 
 
