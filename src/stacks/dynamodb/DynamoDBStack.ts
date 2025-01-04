@@ -22,6 +22,8 @@ export class DynamoDBStack extends Stack {
         sortKey: { name: 'owner', type: AttributeType.STRING },
         billingMode: BillingMode.PAY_PER_REQUEST,
         pointInTimeRecovery: true,
+        maxReadRequestUnits: 1,
+        maxWriteRequestUnits: 1,
       }),
     };
 
