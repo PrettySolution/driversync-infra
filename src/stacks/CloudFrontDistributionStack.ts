@@ -1,8 +1,9 @@
 import path from 'node:path';
 import { DockerImage, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import { Distribution, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
-import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { HttpOrigin, S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
@@ -13,6 +14,7 @@ import { MyAppVersions, ThisEnvironment } from '../interfaces';
 interface CloudFrontDistributionStackProps extends StackProps {
   env: ThisEnvironment;
   versions: MyAppVersions;
+  api: HttpApi;
 }
 
 export class CloudFrontDistributionStack extends Stack {
@@ -42,6 +44,9 @@ export class CloudFrontDistributionStack extends Stack {
       defaultBehavior: {
         origin: S3BucketOrigin.withOriginAccessControl(webSiteBucket),
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      additionalBehaviors: {
+        'api/*': { origin: new HttpOrigin(`${props.api.apiId}.execute-api.${this.region}.amazonaws.com`) },
       },
       domainNames: [`${subDomain}.${hostedZone.zoneName}`],
       certificate: cert,
