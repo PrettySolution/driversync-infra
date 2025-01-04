@@ -17,7 +17,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   devDeps: ['cdk-dia'], /* Build dependencies for this module. */
 
   workflowBootstrapSteps: [driverFECheckoutStep],
-  autoApproveOptions: { allowedUsernames: ['prettysolution[bot]'], secret: 'PR_AUTO_APPROVE' },
+  autoApproveOptions: { allowedUsernames: ['prettysolution[bot]', 'vasylherman'], secret: 'PR_AUTO_APPROVE' },
   autoApproveUpgrades: true,
 });
 
