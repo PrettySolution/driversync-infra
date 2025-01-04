@@ -43,6 +43,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@types/aws-lambda": "^8.10.147",
     "aws-cdk-github-oidc": "^2.4.1",
     "aws-cdk-lib": "^2.171.1",
     "cdk-pipelines-github": "^0.4.128",

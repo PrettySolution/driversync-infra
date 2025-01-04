@@ -75,6 +75,10 @@
       "type": "build"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "runtime"
+    },
+    {
       "name": "aws-cdk-github-oidc",
       "type": "runtime"
     },

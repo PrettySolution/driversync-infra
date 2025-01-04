@@ -13,7 +13,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   githubOptions: { projenCredentials: GithubCredentials.fromApp() },
   release: false,
 
-  deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc'], /* Runtime dependencies of this module. */
+  deps: ['cdk-pipelines-github', 'aws-cdk-github-oidc', '@types/aws-lambda'], /* Runtime dependencies of this module. */
   devDeps: ['cdk-dia'], /* Build dependencies for this module. */
 
   workflowBootstrapSteps: [driverFECheckoutStep],
