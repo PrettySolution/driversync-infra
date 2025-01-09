@@ -13,7 +13,7 @@ import {
 } from '../constants';
 import { MyAppVersions } from '../interfaces';
 
-const myAppVersions: MyAppVersions = {
+export const myAppVersions: MyAppVersions = {
   driver: {
     frontend: { version: versions.DriverFrontend['driver-frontend'], commitId: versions.DriverFrontendDynamic.commitId },
   },

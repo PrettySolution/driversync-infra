@@ -29,4 +29,12 @@ const project = new awscdk.AwsCdkTypeScriptApp({
 const driverFrontCommitId = execSync('git -C driver-frontend rev-parse --short HEAD').toString().trim();
 new JsonFile(project, 'src/ci/driver-frontend-dynamic.json', { obj: { commitId: driverFrontCommitId } });
 
+const devPipeline: string =
+  'cdk -a "npx ts-node -P tsconfig.json --prefer-ts-exts';
+
+project.addTask('cdk:dev', {
+  exec: `${devPipeline} src/pipelines/DevPipelineApp.ts"`,
+  receiveArgs: true,
+});
+
 project.synth();
