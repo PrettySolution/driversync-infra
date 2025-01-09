@@ -1,5 +1,5 @@
 import { App } from 'aws-cdk-lib';
-import { PipelineStack } from './github-pipeline/PipelineStack';
+import { GitHubPipelineStack } from './pipelines/GitHubPipelineStack';
 
 
 // for development, use account/region from cdk cli
@@ -10,6 +10,6 @@ const devEnv = {
 
 const app = new App();
 
-new PipelineStack(app, 'gh-pipeline', { env: devEnv });
+new GitHubPipelineStack(app, 'gh-pipeline', { env: devEnv });
 
 app.synth();

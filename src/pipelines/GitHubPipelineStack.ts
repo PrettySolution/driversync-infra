@@ -19,7 +19,7 @@ const myAppVersions: MyAppVersions = {
   },
 };
 
-export class PipelineStack extends Stack {
+export class GitHubPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
 
