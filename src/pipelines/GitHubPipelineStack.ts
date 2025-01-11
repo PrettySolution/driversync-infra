@@ -13,13 +13,13 @@ import {
 } from '../constants';
 import { MyAppVersions } from '../interfaces';
 
-const myAppVersions: MyAppVersions = {
+export const myAppVersions: MyAppVersions = {
   driver: {
     frontend: { version: versions.DriverFrontend['driver-frontend'], commitId: versions.DriverFrontendDynamic.commitId },
   },
 };
 
-export class PipelineStack extends Stack {
+export class GitHubPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
 

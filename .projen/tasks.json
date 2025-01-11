@@ -28,6 +28,15 @@
       "name": "bundle",
       "description": "Prepare assets"
     },
+    "cdk:dev": {
+      "name": "cdk:dev",
+      "steps": [
+        {
+          "exec": "cdk -a \"npx ts-node -P tsconfig.json --prefer-ts-exts src/pipelines/DevPipelineApp.ts\"",
+          "receiveArgs": true
+        }
+      ]
+    },
     "clobber": {
       "name": "clobber",
       "description": "hard resets to HEAD of origin and cleans the local repo",
