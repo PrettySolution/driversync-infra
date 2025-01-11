@@ -1,22 +1,35 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { HttpApi, HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaAuthorizer } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
-import { AppTables } from '../../dynamodb/DynamoDBStack';
+import { AppTables } from '../../core/DynamoDBStack';
 
 export const REPORT_TABLE_NAME: string = 'REPORT_TABLE_NAME';
+
+export interface AuthorizerContext {
+  user: string;
+}
+
+export interface IReport {
+  id: string;
+  owner: string;
+  type: string;
+}
 
 interface ReportStackProps extends StackProps {
   api: HttpApi;
   db: AppTables;
+  authorizer: HttpLambdaAuthorizer;
 }
 
 export class ReportStack extends Stack {
   constructor(scope: Construct, id: string, props: ReportStackProps) {
     super(scope, id, props);
+
 
     const getFunc = new NodejsFunction(this, 'get', {
       runtime: Runtime.NODEJS_20_X,
@@ -38,11 +51,13 @@ export class ReportStack extends Stack {
       path: '/api/report',
       methods: [HttpMethod.GET],
       integration: new HttpLambdaIntegration('integration', getFunc),
+      authorizer: props.authorizer,
     });
     props.api.addRoutes({
       path: '/api/report',
       methods: [HttpMethod.PUT],
       integration: new HttpLambdaIntegration('integration', putFunc),
+      authorizer: props.authorizer,
     });
 
     props.db.report.grantReadData(getFunc);

@@ -79,6 +79,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/util-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "@types/aws-lambda",
       "type": "runtime"
     },
@@ -98,6 +102,10 @@
     {
       "name": "constructs",
       "version": "^10.0.5",
+      "type": "runtime"
+    },
+    {
+      "name": "uuidv4",
       "type": "runtime"
     }
   ],
