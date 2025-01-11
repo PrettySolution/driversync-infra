@@ -1,3 +1,0 @@
-### get report
-GET https://driversync.stage.prettysolution.com/api/report?hello=world
-Content-Type: application/json

@@ -2,9 +2,12 @@ import { GitHubStage, GitHubStageProps } from 'cdk-pipelines-github';
 import { Construct } from 'constructs';
 import { MyAppVersions, ThisEnvironment } from '../interfaces';
 import { ApiGatewayStack } from '../stacks/api/ApiGatewayStack';
+// @ts-ignore
+import { DebugStack } from '../stacks/api/debug/DebugStack';
 import { ReportStack } from '../stacks/api/report/ReportStack';
 import { CloudFrontDistributionStack } from '../stacks/CloudFrontDistributionStack';
-import { DynamoDBStack } from '../stacks/dynamodb/DynamoDBStack';
+import { CognitoStack } from '../stacks/core/CognitoStack';
+import { DynamoDBStack } from '../stacks/core/DynamoDBStack';
 
 
 interface MyAppStageProps extends GitHubStageProps {
@@ -17,20 +20,12 @@ export class MyAppStage extends GitHubStage {
     super(scope, id, props);
 
     const env = props.env;
-
+    const cognito = new CognitoStack(this, 'CognitoStack', {});
     const db = new DynamoDBStack(this, 'DynamoDBStack', {});
-    const api = new ApiGatewayStack(this, 'ApiGatewayStack', { env });
-    new ReportStack(this, 'ReportStack', {
-      env,
-      api: api.api,
-      db: db.tables,
-    });
-    new CloudFrontDistributionStack(this, 'CloudFrontDistribution', {
-      description: 'CloudFront distribution for prettysolution.com',
-      env,
-      versions: props.versions,
-      api: api.api,
-    });
+    const api = new ApiGatewayStack(this, 'ApiGatewayStack', { env, userPool: cognito.userPool });
+    new ReportStack(this, 'ReportStack', { env, api: api.api, db: db.tables, authorizer: api.authorizer });
+    new DebugStack(this, 'DebugStack', { env, api: api.api });
+    new CloudFrontDistributionStack(this, 'CloudFrontDistribution', { env, versions: props.versions, api: api.api });
 
   }
 
