@@ -18,7 +18,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'aws-cdk-github-oidc',
     '@types/aws-lambda',
     '@aws-sdk/client-dynamodb',
-    'uuidv4',
+    'uuid',
     '@aws-sdk/util-dynamodb',
   ],
   devDeps: ['cdk-dia'], /* Build dependencies for this module. */
