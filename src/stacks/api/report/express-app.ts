@@ -44,7 +44,7 @@ app.get('/api/report', async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    res.status(500).send({ msg: 'error' });
+    res.sendStatus(500);
   }
 });
 
@@ -67,7 +67,7 @@ app.put('/api/report', async (req, res) => {
     res.status(data.$metadata.httpStatusCode!).send({ msg: 'OK', lastEvaluatedKey: report.timestamp });
   } catch (e) {
     console.error(e);
-    res.status(500).send({ msg: 'error' });
+    res.sendStatus(500);
   }
 });
 
