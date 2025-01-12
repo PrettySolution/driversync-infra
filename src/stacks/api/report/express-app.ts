@@ -64,7 +64,7 @@ app.route('/api/report')
       if (data.Items) {
         data.Items.forEach(i => items.push(unmarshall(i) as IReport));
       }
-      res.status(data.$metadata.httpStatusCode!).send({
+      res.send({
         items: items, limit, lastEvaluatedKey,
       });
     } catch (e) {
@@ -83,8 +83,8 @@ app.route('/api/report')
         TableName: process.env[REPORT_TABLE_NAME],
         Item: marshall(report),
       });
-      const data = await ddbClient.send(command);
-      res.status(data.$metadata.httpStatusCode!).send({ msg: 'OK', lastEvaluatedKey: report.timestamp });
+      await ddbClient.send(command);
+      res.send({ msg: 'OK', lastEvaluatedKey: report.timestamp });
     } catch (e) {
       console.error(e);
       res.sendStatus(500);
