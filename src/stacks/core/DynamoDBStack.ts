@@ -20,7 +20,7 @@ export class DynamoDBStack extends Stack {
 
     const report = new Table(this, 'Report', {
       // tableName: 'Report',
-      partitionKey: { name: 'owner', type: AttributeType.STRING },
+      partitionKey: { name: 'ownerId', type: AttributeType.STRING },
       sortKey: { name: 'timestamp', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       // pointInTimeRecovery: true,

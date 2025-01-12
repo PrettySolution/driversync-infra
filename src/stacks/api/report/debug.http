@@ -1,10 +1,10 @@
 ### get report
-GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=1736685554685
+GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=
 Content-Type: application/json
 Authorization: prettysolution
 
 ### get report by id
-GET https://driversync.stage.prettysolution.com/api/report/1736694569771
+GET https://driversync.stage.prettysolution.com/api/report/1736696290904
 Content-Type: application/json
 Authorization: prettysolution
 

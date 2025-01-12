@@ -1,4 +1,4 @@
-import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import express from 'express';
 import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './index';
@@ -23,8 +23,20 @@ const ddbClient = new DynamoDBClient();
 
 app.route('/api/report/:timestamp')
   .get( async (req, res) => {
-    console.log(req.requestContext.authorizer.lambda.user);
-    res.send(req.params);
+    try {
+      const command = new GetItemCommand({
+        TableName: process.env[REPORT_TABLE_NAME],
+        Key: marshall({
+          ownerId: req.requestContext.authorizer.lambda.user,
+          timestamp: req.params.timestamp,
+        }),
+      });
+      const data = await ddbClient.send(command);
+      res.send(data.Item);
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
   });
 
 app.route('/api/report')
@@ -34,12 +46,11 @@ app.route('/api/report')
     try {
       const command = new QueryCommand({
         TableName: process.env[REPORT_TABLE_NAME],
-        KeyConditionExpression: '#owner = :ownerValue',
-        ExpressionAttributeNames: { '#owner': 'owner' },
+        KeyConditionExpression: 'ownerId = :ownerValue',
         ExpressionAttributeValues: { ':ownerValue': { S: req.requestContext.authorizer.lambda.user } },
         Limit: limit,
         ExclusiveStartKey: query.LastEvaluatedKey ? marshall({
-          owner: req.requestContext.authorizer.lambda.user,
+          ownerId: req.requestContext.authorizer.lambda.user,
           timestamp: query.LastEvaluatedKey,
         }) : undefined,
       });
@@ -64,7 +75,7 @@ app.route('/api/report')
   .put(async (req, res) => {
     const report: IReport = {
       timestamp: Date.now().toString(),
-      owner: req.requestContext.authorizer.lambda.user,
+      ownerId: req.requestContext.authorizer.lambda.user,
       type: req.body.type,
     };
     try {
