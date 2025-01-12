@@ -22,7 +22,7 @@ Authorization: prettysolution
 
 {"type":"custom"}
 
-### debug
+### debug put
 PUT https://driversync.stage.prettysolution.com/api/report/debug?hello=world
 Content-Type: application/json
 Authorization: prettysolution
@@ -30,3 +30,7 @@ Authorization: prettysolution
 {"type":"default"}
 
 
+### delete report
+DELETE https://driversync.stage.prettysolution.com/api/report/1736697686488
+Content-Type: application/json
+Authorization: prettysolution

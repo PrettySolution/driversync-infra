@@ -1,4 +1,5 @@
 import {
+  DeleteItemCommand,
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
@@ -45,7 +46,6 @@ app.route('/api/report/:timestamp')
     }
   })
   .patch(async (req, res) => {
-    console.log(req.body.type);
     try {
       const command = new UpdateItemCommand({
         TableName: process.env[REPORT_TABLE_NAME],
@@ -60,6 +60,22 @@ app.route('/api/report/:timestamp')
       });
       const data = await ddbClient.send(command);
       res.send(data.Attributes);
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
+  })
+  .delete(async (req, res)=>{
+    try {
+      const command = new DeleteItemCommand({
+        TableName: process.env[REPORT_TABLE_NAME],
+        Key: marshall({
+          ownerId: req.requestContext.authorizer.lambda.user,
+          timestamp: req.params.timestamp,
+        }),
+      });
+      const data = await ddbClient.send(command);
+      res.send(data);
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
