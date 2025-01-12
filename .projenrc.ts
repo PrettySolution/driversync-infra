@@ -20,8 +20,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@aws-sdk/client-dynamodb',
     'uuid',
     '@aws-sdk/util-dynamodb',
+    'express',
+    'serverless-http',
   ],
-  devDeps: ['cdk-dia'], /* Build dependencies for this module. */
+  devDeps: ['cdk-dia', '@types/express'], /* Build dependencies for this module. */
 
   workflowBootstrapSteps: [driverFECheckoutStep],
   autoApproveOptions: { allowedUsernames: ['prettysolution[bot]', 'vasylherman'], secret: 'PR_AUTO_APPROVE' },

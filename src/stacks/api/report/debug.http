@@ -11,8 +11,10 @@ Authorization: prettysolution
 {"type":"default"}
 
 ### debug
-GET https://driversync.stage.prettysolution.com/api/debug/authorizer?hello=world
+PUT https://driversync.stage.prettysolution.com/api/report/debug?hello=world
 Content-Type: application/json
 Authorization: prettysolution
+
+{"type":"default"}
 
 
