@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: prettysolution
 
 ### get report by id
-GET https://driversync.stage.prettysolution.com/api/report/1736697319190
+GET https://driversync.stage.prettysolution.com/api/report/1736697686488
 Content-Type: application/json
 Authorization: prettysolution
 
@@ -14,6 +14,13 @@ Content-Type: application/json
 Authorization: prettysolution
 
 {"type":"default"}
+
+### patch report
+PATCH https://driversync.stage.prettysolution.com/api/report/1736697686488
+Content-Type: application/json
+Authorization: prettysolution
+
+{"type":"custom"}
 
 ### debug
 PUT https://driversync.stage.prettysolution.com/api/report/debug?hello=world

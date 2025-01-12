@@ -1,4 +1,10 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  GetItemCommand,
+  PutItemCommand,
+  QueryCommand,
+  UpdateItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import express from 'express';
 import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './index';
@@ -33,6 +39,27 @@ app.route('/api/report/:timestamp')
       });
       const data = await ddbClient.send(command);
       res.send(data.Item);
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
+  })
+  .patch(async (req, res) => {
+    console.log(req.body.type);
+    try {
+      const command = new UpdateItemCommand({
+        TableName: process.env[REPORT_TABLE_NAME],
+        Key: marshall({
+          ownerId: req.requestContext.authorizer.lambda.user,
+          timestamp: req.params.timestamp,
+        }),
+        UpdateExpression: 'SET #type = :typeValue',
+        ExpressionAttributeNames: { '#type': 'type' },
+        ExpressionAttributeValues: { ':typeValue': { S: req.body.type } },
+        ReturnValues: 'ALL_NEW',
+      });
+      const data = await ddbClient.send(command);
+      res.send(data.Attributes);
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
