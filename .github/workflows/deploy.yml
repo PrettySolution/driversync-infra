@@ -152,151 +152,6 @@ jobs:
         name: Publish Assets-FileAsset12
         run: /bin/bash
           ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset12-step.sh
-  Assets-FileAsset13:
-    name: Publish Assets Assets-FileAsset13
-    needs:
-      - Build-Build
-    permissions:
-      contents: read
-      id-token: write
-    runs-on: ubuntu-latest
-    outputs:
-      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
-    steps:
-      - name: Download cdk.out
-        uses: actions/download-artifact@v4
-        with:
-          name: cdk.out
-          path: cdk.out
-      - name: Install
-        run: npm install --no-save cdk-assets
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-west-2
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - id: Publish
-        name: Publish Assets-FileAsset13
-        run: /bin/bash
-          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset13-step.sh
-  Assets-FileAsset14:
-    name: Publish Assets Assets-FileAsset14
-    needs:
-      - Build-Build
-    permissions:
-      contents: read
-      id-token: write
-    runs-on: ubuntu-latest
-    outputs:
-      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
-    steps:
-      - name: Download cdk.out
-        uses: actions/download-artifact@v4
-        with:
-          name: cdk.out
-          path: cdk.out
-      - name: Install
-        run: npm install --no-save cdk-assets
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-west-2
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - id: Publish
-        name: Publish Assets-FileAsset14
-        run: /bin/bash
-          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset14-step.sh
-  Assets-FileAsset15:
-    name: Publish Assets Assets-FileAsset15
-    needs:
-      - Build-Build
-    permissions:
-      contents: read
-      id-token: write
-    runs-on: ubuntu-latest
-    outputs:
-      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
-    steps:
-      - name: Download cdk.out
-        uses: actions/download-artifact@v4
-        with:
-          name: cdk.out
-          path: cdk.out
-      - name: Install
-        run: npm install --no-save cdk-assets
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-west-2
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - id: Publish
-        name: Publish Assets-FileAsset15
-        run: /bin/bash
-          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset15-step.sh
-  Assets-FileAsset16:
-    name: Publish Assets Assets-FileAsset16
-    needs:
-      - Build-Build
-    permissions:
-      contents: read
-      id-token: write
-    runs-on: ubuntu-latest
-    outputs:
-      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
-    steps:
-      - name: Download cdk.out
-        uses: actions/download-artifact@v4
-        with:
-          name: cdk.out
-          path: cdk.out
-      - name: Install
-        run: npm install --no-save cdk-assets
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-west-2
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - id: Publish
-        name: Publish Assets-FileAsset16
-        run: /bin/bash
-          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset16-step.sh
-  Assets-FileAsset17:
-    name: Publish Assets Assets-FileAsset17
-    needs:
-      - Build-Build
-    permissions:
-      contents: read
-      id-token: write
-    runs-on: ubuntu-latest
-    outputs:
-      asset-hash: ${{ steps.Publish.outputs.asset-hash }}
-    steps:
-      - name: Download cdk.out
-        uses: actions/download-artifact@v4
-        with:
-          name: cdk.out
-          path: cdk.out
-      - name: Install
-        run: npm install --no-save cdk-assets
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-west-2
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - id: Publish
-        name: Publish Assets-FileAsset17
-        run: /bin/bash
-          ./cdk.out/assembly-gh-pipeline-driver-stage/publish-Assets-FileAsset17-step.sh
   Assets-FileAsset2:
     name: Publish Assets Assets-FileAsset2
     needs:
@@ -565,45 +420,6 @@ jobs:
             needs.Assets-FileAsset1.outputs.asset-hash }}.json
           no-fail-on-empty-changeset: "1"
           role-arn: arn:aws:iam::277707141071:role/cdk-hnb659fds-cfn-exec-role-277707141071-us-east-1
-  driver-stage-DebugStack-Deploy:
-    name: Deploy ghpipelinedriverstageDebugStack9764E058
-    permissions:
-      contents: read
-      id-token: write
-    needs:
-      - Build-Build
-      - Assets-FileAsset2
-      - Assets-FileAsset3
-      - Assets-FileAsset4
-      - Assets-FileAsset5
-    runs-on: ubuntu-latest
-    steps:
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - name: Assume CDK Deploy Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
-          role-to-assume: arn:aws:iam::277707141071:role/cdk-hnb659fds-deploy-role-277707141071-us-east-1
-          role-external-id: Pipeline
-      - id: Deploy
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: driver-stage-DebugStack
-          template: https://cdk-hnb659fds-assets-277707141071-us-east-1.s3.us-east-1.amazonaws.com/${{
-            needs.Assets-FileAsset2.outputs.asset-hash }}.json
-          no-fail-on-empty-changeset: "1"
-          role-arn: arn:aws:iam::277707141071:role/cdk-hnb659fds-cfn-exec-role-277707141071-us-east-1
   driver-stage-DynamoDBStack-Deploy:
     name: Deploy ghpipelinedriverstageDynamoDBStack89EA2C93
     permissions:
@@ -611,7 +427,7 @@ jobs:
       id-token: write
     needs:
       - Build-Build
-      - Assets-FileAsset6
+      - Assets-FileAsset2
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate Via OIDC Role
@@ -637,47 +453,7 @@ jobs:
         with:
           name: driver-stage-DynamoDBStack
           template: https://cdk-hnb659fds-assets-277707141071-us-east-1.s3.us-east-1.amazonaws.com/${{
-            needs.Assets-FileAsset6.outputs.asset-hash }}.json
-          no-fail-on-empty-changeset: "1"
-          role-arn: arn:aws:iam::277707141071:role/cdk-hnb659fds-cfn-exec-role-277707141071-us-east-1
-  driver-stage-ReportStack-Deploy:
-    name: Deploy ghpipelinedriverstageReportStackBEBDE182
-    permissions:
-      contents: read
-      id-token: write
-    needs:
-      - Build-Build
-      - Assets-FileAsset7
-      - Assets-FileAsset8
-      - Assets-FileAsset4
-      - Assets-FileAsset9
-      - driver-stage-DynamoDBStack-Deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Authenticate Via OIDC Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          role-to-assume: arn:aws:iam::277707141071:role/GithubSupport-DeployRole
-      - name: Assume CDK Deploy Role
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: us-east-1
-          role-duration-seconds: 1800
-          role-skip-session-tagging: true
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
-          role-to-assume: arn:aws:iam::277707141071:role/cdk-hnb659fds-deploy-role-277707141071-us-east-1
-          role-external-id: Pipeline
-      - id: Deploy
-        uses: aws-actions/aws-cloudformation-github-deploy@v1
-        with:
-          name: driver-stage-ReportStack
-          template: https://cdk-hnb659fds-assets-277707141071-us-east-1.s3.us-east-1.amazonaws.com/${{
-            needs.Assets-FileAsset7.outputs.asset-hash }}.json
+            needs.Assets-FileAsset2.outputs.asset-hash }}.json
           no-fail-on-empty-changeset: "1"
           role-arn: arn:aws:iam::277707141071:role/cdk-hnb659fds-cfn-exec-role-277707141071-us-east-1
   driver-stage-ApiGatewayStack-Deploy:
@@ -687,11 +463,11 @@ jobs:
       id-token: write
     needs:
       - Build-Build
-      - Assets-FileAsset10
-      - Assets-FileAsset11
+      - Assets-FileAsset3
       - Assets-FileAsset4
-      - driver-stage-ReportStack-Deploy
-      - driver-stage-DebugStack-Deploy
+      - Assets-FileAsset5
+      - Assets-FileAsset6
+      - driver-stage-DynamoDBStack-Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate Via OIDC Role
@@ -717,7 +493,7 @@ jobs:
         with:
           name: driver-stage-ApiGatewayStack
           template: https://cdk-hnb659fds-assets-277707141071-us-east-1.s3.us-east-1.amazonaws.com/${{
-            needs.Assets-FileAsset10.outputs.asset-hash }}.json
+            needs.Assets-FileAsset3.outputs.asset-hash }}.json
           no-fail-on-empty-changeset: "1"
           role-arn: arn:aws:iam::277707141071:role/cdk-hnb659fds-cfn-exec-role-277707141071-us-east-1
   driver-stage-CloudFrontDistribution-Deploy:
@@ -727,12 +503,12 @@ jobs:
       id-token: write
     needs:
       - Build-Build
+      - Assets-FileAsset7
+      - Assets-FileAsset8
+      - Assets-FileAsset9
+      - Assets-FileAsset10
+      - Assets-FileAsset11
       - Assets-FileAsset12
-      - Assets-FileAsset13
-      - Assets-FileAsset14
-      - Assets-FileAsset15
-      - Assets-FileAsset16
-      - Assets-FileAsset17
       - driver-stage-ApiGatewayStack-Deploy
     runs-on: ubuntu-latest
     steps:
@@ -759,6 +535,6 @@ jobs:
         with:
           name: driver-stage-CloudFrontDistribution
           template: https://cdk-hnb659fds-assets-277707141071-us-east-1.s3.us-east-1.amazonaws.com/${{
-            needs.Assets-FileAsset12.outputs.asset-hash }}.json
+            needs.Assets-FileAsset7.outputs.asset-hash }}.json
           no-fail-on-empty-changeset: "1"
           role-arn: arn:aws:iam::277707141071:role/cdk-hnb659fds-cfn-exec-role-277707141071-us-east-1
