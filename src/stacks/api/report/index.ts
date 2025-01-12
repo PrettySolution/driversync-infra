@@ -11,11 +11,11 @@ export interface AuthorizerContext {
 }
 
 export interface IReport {
-  id: string;
+  timestamp: string;
   owner: string;
-  type: string;
+  type?: string;
 }
 
 export interface QueryStringParameters {
-  hello: string;
+  LastEvaluatedKey?: string;
 }

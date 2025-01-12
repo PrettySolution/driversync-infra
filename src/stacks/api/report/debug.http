@@ -1,5 +1,5 @@
 ### get report
-GET https://driversync.stage.prettysolution.com/api/report?hello=world
+GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=1736685554685
 Content-Type: application/json
 Authorization: prettysolution
 

@@ -19,7 +19,8 @@ export class MyAppStage extends GitHubStage {
     const env = props.env;
     const cognito = new CognitoStack(this, 'CognitoStack', {});
     const db = new DynamoDBStack(this, 'DynamoDBStack', {});
-    const api = new ApiGatewayStack(this, 'ApiGatewayStack', { env, userPool: cognito.userPool, db: db.tables });
+    const api = new ApiGatewayStack(this, 'ApiGatewayStack', { env, userPool: cognito.userPool });
+    api.addDependency(db);
     new CloudFrontDistributionStack(this, 'CloudFrontDistribution', { env, versions: props.versions, api: api.api });
 
   }

@@ -1,7 +1,6 @@
-import { DynamoDBClient, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
+import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import express from 'express';
-import { v4 as uuidv4 } from 'uuid';
 import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './index';
 
 const app = express();
@@ -13,20 +12,35 @@ const ddbClient = new DynamoDBClient();
 // GET Report
 app.get('/api/report', async (req, res) => {
   console.log(req.method, req.originalUrl);
+  const limit = 2;
   // @ts-ignore
   const authorizerContext: AuthorizerContext = req.requestContext.authorizer.lambda;
-  const limit = 5;
+  // @ts-ignore
+  const query: QueryStringParameters = req.query;
   try {
-    const command = new ScanCommand({
+    const command = new QueryCommand({
       TableName: process.env[REPORT_TABLE_NAME],
-      FilterExpression: '#owner = :ownerValue',
+      KeyConditionExpression: '#owner = :ownerValue',
       ExpressionAttributeNames: { '#owner': 'owner' },
       ExpressionAttributeValues: { ':ownerValue': { S: authorizerContext.user } },
       Limit: limit,
+      ExclusiveStartKey: query.LastEvaluatedKey ? marshall({
+        owner: authorizerContext.user,
+        timestamp: query.LastEvaluatedKey,
+      }) : undefined,
     });
     const data = await ddbClient.send(command);
+    let lastEvaluatedKey;
+    if (data.LastEvaluatedKey) {
+      const lastItem = unmarshall(data.LastEvaluatedKey) as IReport;
+      lastEvaluatedKey = lastItem.timestamp;
+    }
+    let items: IReport[] = [];
+    if (data.Items) {
+      data.Items.forEach(i => items.push(unmarshall(i) as IReport));
+    }
     res.status(data.$metadata.httpStatusCode!).send({
-      body: data, limit,
+      items: items, limit, lastEvaluatedKey,
     });
   } catch (e) {
     console.log(e);
@@ -40,7 +54,7 @@ app.put('/api/report', async (req, res) => {
   // @ts-ignore
   const authorizerContext: AuthorizerContext = req.requestContext.authorizer.lambda;
   const report: IReport = {
-    id: uuidv4(),
+    timestamp: Date.now().toString(),
     owner: authorizerContext.user,
     type: req.body.type,
   };
@@ -50,7 +64,7 @@ app.put('/api/report', async (req, res) => {
       Item: marshall(report),
     });
     const data = await ddbClient.send(command);
-    res.status(data.$metadata.httpStatusCode!).send({ body: JSON.stringify(data) });
+    res.status(data.$metadata.httpStatusCode!).send({ msg: 'OK', lastEvaluatedKey: report.timestamp });
   } catch (e) {
     console.error(e);
     res.status(500).send({ msg: 'error' });
@@ -65,7 +79,6 @@ app.all('/api/report/debug', (req, res) => {
   const authorizerContext: AuthorizerContext = req.requestContext.authorizer.lambda;
   // @ts-ignore
   const query: QueryStringParameters = req.query;
-
   const data = {
     body,
     authorizerContext,
