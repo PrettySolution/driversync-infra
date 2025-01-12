@@ -12,7 +12,7 @@ export interface AuthorizerContext {
 
 export interface IReport {
   timestamp: string;
-  owner: string;
+  ownerId: string;
   type?: string;
 }
 

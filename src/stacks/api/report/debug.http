@@ -1,5 +1,10 @@
 ### get report
-GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=1736685554685
+GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=1736696290904
+Content-Type: application/json
+Authorization: prettysolution
+
+### get report by id
+GET https://driversync.stage.prettysolution.com/api/report/1736697686488
 Content-Type: application/json
 Authorization: prettysolution
 
@@ -10,7 +15,14 @@ Authorization: prettysolution
 
 {"type":"default"}
 
-### debug
+### patch report
+PATCH https://driversync.stage.prettysolution.com/api/report/1736697686488
+Content-Type: application/json
+Authorization: prettysolution
+
+{"type":"custom"}
+
+### debug put
 PUT https://driversync.stage.prettysolution.com/api/report/debug?hello=world
 Content-Type: application/json
 Authorization: prettysolution
@@ -18,3 +30,7 @@ Authorization: prettysolution
 {"type":"default"}
 
 
+### delete report
+DELETE https://driversync.stage.prettysolution.com/api/report/1736697686488
+Content-Type: application/json
+Authorization: prettysolution
