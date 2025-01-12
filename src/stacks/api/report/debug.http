@@ -3,6 +3,11 @@ GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=1736
 Content-Type: application/json
 Authorization: prettysolution
 
+### get report by id
+GET https://driversync.stage.prettysolution.com/api/report/1736694569771
+Content-Type: application/json
+Authorization: prettysolution
+
 ### put report
 PUT https://driversync.stage.prettysolution.com/api/report?hello=world
 Content-Type: application/json

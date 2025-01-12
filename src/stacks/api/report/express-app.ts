@@ -3,29 +3,43 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import express from 'express';
 import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './index';
 
+declare global {
+  namespace Express {
+    interface Request {
+      requestContext: { authorizer: { lambda: AuthorizerContext } };
+    }
+  }
+}
+
 const app = express();
 
-// Middleware to parse JSON
 app.use(express.json());
+app.use((req, _, next) => {
+  console.log(req.method, req.originalUrl);
+  next();
+});
+
 const ddbClient = new DynamoDBClient();
+
+app.route('/api/report/:timestamp')
+  .get( async (req, res) => {
+    console.log(req.requestContext.authorizer.lambda.user);
+    res.send(req.params);
+  });
 
 app.route('/api/report')
   .get(async (req, res) => {
-    console.log(req.method, req.originalUrl);
     const limit = 2;
-    // @ts-ignore
-    const authorizerContext: AuthorizerContext = req.requestContext.authorizer.lambda;
-    // @ts-ignore
     const query: QueryStringParameters = req.query;
     try {
       const command = new QueryCommand({
         TableName: process.env[REPORT_TABLE_NAME],
         KeyConditionExpression: '#owner = :ownerValue',
         ExpressionAttributeNames: { '#owner': 'owner' },
-        ExpressionAttributeValues: { ':ownerValue': { S: authorizerContext.user } },
+        ExpressionAttributeValues: { ':ownerValue': { S: req.requestContext.authorizer.lambda.user } },
         Limit: limit,
         ExclusiveStartKey: query.LastEvaluatedKey ? marshall({
-          owner: authorizerContext.user,
+          owner: req.requestContext.authorizer.lambda.user,
           timestamp: query.LastEvaluatedKey,
         }) : undefined,
       });
@@ -48,12 +62,9 @@ app.route('/api/report')
     }
   })
   .put(async (req, res) => {
-    console.log(req.method, req.originalUrl);
-    // @ts-ignore
-    const authorizerContext: AuthorizerContext = req.requestContext.authorizer.lambda;
     const report: IReport = {
       timestamp: Date.now().toString(),
-      owner: authorizerContext.user,
+      owner: req.requestContext.authorizer.lambda.user,
       type: req.body.type,
     };
     try {
@@ -71,18 +82,11 @@ app.route('/api/report')
 
 app.route('/api/report/debug')
   .all((req, res) => {
-    console.log(req.method, req.originalUrl);
-    const body: QueryStringParameters = req.body;
-    // @ts-ignore
-    const authorizerContext: AuthorizerContext = req.requestContext.authorizer.lambda;
-    // @ts-ignore
-    const query: QueryStringParameters = req.query;
-    const data = {
-      body,
-      authorizerContext,
-      query,
-    };
-    res.send(data);
+    res.send({
+      body: req.body,
+      query: req.query,
+      authorizerContext: req.requestContext.authorizer.lambda,
+    });
   });
 
 // Export the app for serverless-http
