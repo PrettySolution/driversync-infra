@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { AuthorizerContext } from './report';
+import { AuthorizerContext } from './report/serverless';
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   if (event.headers.authorization) {
