@@ -23,7 +23,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'express',
     'serverless-http',
   ],
-  devDeps: ['cdk-dia', '@types/express', 'nodemon'], /* Build dependencies for this module. */
+  devDeps: ['cdk-dia', '@types/express'],
 
   workflowBootstrapSteps: [driverFECheckoutStep],
   autoApproveOptions: { allowedUsernames: ['prettysolution[bot]', 'vasylherman'], secret: 'PR_AUTO_APPROVE' },
@@ -37,7 +37,15 @@ const devPipeline: string =
   'cdk -a "npx ts-node -P tsconfig.json --prefer-ts-exts';
 
 project.addTask('cdk:dev', {
+  requiredEnv: ['CDK_DOMAIN_NAME'],
   exec: `${devPipeline} src/pipelines/DevPipelineApp.ts"`,
+  receiveArgs: true,
+  condition: 'aws sts get-caller-identity --query "Account" --output text | grep -Eq \'^(277707141071|268591637005)$\' && exit 1 || exit 0',
+});
+
+project.addTask('express:run', {
+  requiredEnv: ['AWS_PROFILE_REGION', 'REPORT_TABLE_NAME'],
+  exec: 'npx nodemon src/stacks/api/report/server.ts',
   receiveArgs: true,
 });
 
