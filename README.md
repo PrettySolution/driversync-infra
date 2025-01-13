@@ -8,6 +8,6 @@
 
 #### run express in server mode
 1. follow steps from [Set up DEV in your account](#set-up-dev-in-your-account)
-2. export REPORT_TABLE_NAME=$(aws ssm get-parameter --name "/core/DynamoDbStack/Tables/Report" --query "Parameter.Value" --output text)
-3. nodemon src/stacks/api/report/server.ts
+2. `export REPORT_TABLE_NAME=$(aws ssm get-parameter --name "/core/DynamoDbStack/Tables/Report" --query "Parameter.Value" --output text)`
+3. `npx projen express:run`
 4. [test your api](src/stacks/api/report/debug/report-api.http)

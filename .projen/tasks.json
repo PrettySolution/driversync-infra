@@ -30,12 +30,16 @@
     },
     "cdk:dev": {
       "name": "cdk:dev",
+      "requiredEnv": [
+        "CDK_DOMAIN_NAME"
+      ],
       "steps": [
         {
           "exec": "cdk -a \"npx ts-node -P tsconfig.json --prefer-ts-exts src/pipelines/DevPipelineApp.ts\"",
           "receiveArgs": true
         }
-      ]
+      ],
+      "condition": "aws sts get-caller-identity --query \"Account\" --output text | grep -Eq '^(277707141071|268591637005)$' && exit 1 || exit 0"
     },
     "clobber": {
       "name": "clobber",
@@ -136,6 +140,19 @@
         }
       ]
     },
+    "express:run": {
+      "name": "express:run",
+      "requiredEnv": [
+        "AWS_PROFILE_REGION",
+        "REPORT_TABLE_NAME"
+      ],
+      "steps": [
+        {
+          "exec": "npx nodemon src/stacks/api/report/server.ts",
+          "receiveArgs": true
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -223,13 +240,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@types/express,@types/jest,@types/node,cdk-dia,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,nodemon,projen,ts-jest,ts-node,typescript,@aws-sdk/client-dynamodb,@aws-sdk/util-dynamodb,@types/aws-lambda,aws-cdk-github-oidc,cdk-pipelines-github,express,serverless-http,uuid"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@types/express,@types/jest,@types/node,cdk-dia,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,projen,ts-jest,ts-node,typescript,@aws-sdk/client-dynamodb,@aws-sdk/util-dynamodb,@types/aws-lambda,aws-cdk-github-oidc,cdk-pipelines-github,express,serverless-http,uuid"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @stylistic/eslint-plugin @types/express @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk cdk-dia esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit nodemon projen ts-jest ts-node typescript @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb @types/aws-lambda aws-cdk-github-oidc aws-cdk-lib cdk-pipelines-github constructs express serverless-http uuid"
+          "exec": "yarn upgrade @stylistic/eslint-plugin @types/express @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser aws-cdk cdk-dia esbuild eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-junit projen ts-jest ts-node typescript @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb @types/aws-lambda aws-cdk-github-oidc aws-cdk-lib cdk-pipelines-github constructs express serverless-http uuid"
         },
         {
           "exec": "npx projen"
