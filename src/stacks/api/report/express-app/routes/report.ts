@@ -11,7 +11,7 @@ import { Router } from 'express';
 import { IReport, QueryStringParameters, REPORT_TABLE_NAME } from '../interfaces';
 
 
-export const reportRouter = Router();
+const reportRouter = Router();
 const ddbClient = new DynamoDBClient();
 
 reportRouter.route('/')
@@ -120,3 +120,6 @@ reportRouter.route('/:timestamp')
     }
   });
 
+export {
+  reportRouter,
+};
