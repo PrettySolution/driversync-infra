@@ -10,8 +10,8 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import { REPORT_TABLE_NAME } from './report';
 import { TABLES } from '../core/DynamoDBStack';
+import { REPORT_TABLE_NAME } from './report/express-app/interfaces';
 
 interface ApiGatewayStackProps extends StackProps {
   userPool: UserPool;
@@ -36,7 +36,7 @@ export class ApiGatewayStack extends Stack {
 
     const report = new NodejsFunction(this, 'report', {
       runtime: Runtime.NODEJS_20_X,
-      entry: path.join(__dirname, './report/index.ts'),
+      entry: path.join(__dirname, './report/serverless.ts'),
       logRetention: RetentionDays.ONE_MONTH,
       environment: { [REPORT_TABLE_NAME]: reportTable.tableName },
       // timeout: Duration.seconds(15),

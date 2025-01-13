@@ -23,7 +23,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'express',
     'serverless-http',
   ],
-  devDeps: ['cdk-dia', '@types/express'], /* Build dependencies for this module. */
+  devDeps: ['cdk-dia', '@types/express', 'nodemon'], /* Build dependencies for this module. */
 
   workflowBootstrapSteps: [driverFECheckoutStep],
   autoApproveOptions: { allowedUsernames: ['prettysolution[bot]', 'vasylherman'], secret: 'PR_AUTO_APPROVE' },
