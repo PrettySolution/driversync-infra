@@ -39,7 +39,7 @@ app.route('/api/report/:timestamp')
         }),
       });
       const data = await ddbClient.send(command);
-      res.send(data.Item);
+      res.json(data.Item);
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
@@ -59,7 +59,7 @@ app.route('/api/report/:timestamp')
         ReturnValues: 'ALL_NEW',
       });
       const data = await ddbClient.send(command);
-      res.send(data.Attributes);
+      res.json(data.Attributes);
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
@@ -75,7 +75,7 @@ app.route('/api/report/:timestamp')
         }),
       });
       const data = await ddbClient.send(command);
-      res.send(data);
+      res.json(data);
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
@@ -107,7 +107,7 @@ app.route('/api/report')
       if (data.Items) {
         data.Items.forEach(i => items.push(unmarshall(i) as IReport));
       }
-      res.send({
+      res.json({
         items: items, limit, lastEvaluatedKey,
       });
     } catch (e) {
@@ -127,7 +127,7 @@ app.route('/api/report')
         Item: marshall(report),
       });
       await ddbClient.send(command);
-      res.send({ msg: 'OK', lastEvaluatedKey: report.timestamp });
+      res.json({ msg: 'OK', lastEvaluatedKey: report.timestamp });
     } catch (e) {
       console.error(e);
       res.sendStatus(500);
@@ -136,7 +136,7 @@ app.route('/api/report')
 
 app.route('/api/report/debug')
   .all((req, res) => {
-    res.send({
+    res.json({
       body: req.body,
       query: req.query,
       authorizerContext: req.requestContext.authorizer.lambda,
