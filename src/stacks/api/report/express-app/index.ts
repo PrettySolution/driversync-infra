@@ -1,4 +1,3 @@
-
 import express from 'express';
 import { AuthorizerContext } from './interfaces';
 import { authorizerMiddleware } from './middlewares/authorizerMiddleware';
