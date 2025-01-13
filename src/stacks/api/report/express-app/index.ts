@@ -9,6 +9,8 @@ import {
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import express from 'express';
 import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './interfaces';
+import { authorizerMiddleware } from './middlewares/authorizerMiddleware';
+import { loggerMiddleware } from './middlewares/loggerMiddleware';
 
 declare global {
   namespace Express {
@@ -21,15 +23,13 @@ declare global {
 const app = express();
 
 app.use(express.json());
-app.use((req, _, next) => {
-  console.log(req.method, req.originalUrl);
-  next();
-});
+app.use(loggerMiddleware);
+app.use(authorizerMiddleware);
 
 const ddbClient = new DynamoDBClient();
 
 app.route('/api/report/:timestamp')
-  .get( async (req, res) => {
+  .get(async (req, res) => {
     try {
       const command = new GetItemCommand({
         TableName: process.env[REPORT_TABLE_NAME],
@@ -65,7 +65,7 @@ app.route('/api/report/:timestamp')
       res.sendStatus(500);
     }
   })
-  .delete(async (req, res)=>{
+  .delete(async (req, res) => {
     try {
       const command = new DeleteItemCommand({
         TableName: process.env[REPORT_TABLE_NAME],

@@ -1,5 +1,5 @@
 ### get report
-GET https://driversync.stage.prettysolution.com/api/report?LastEvaluatedKey=1736696290904
+GET http://localhost:3000/api/report?LastEvaluatedKey=1736696290904
 Content-Type: application/json
 Authorization: prettysolution
 
