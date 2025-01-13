@@ -10,8 +10,8 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
-import { REPORT_TABLE_NAME } from './report/serverless';
 import { TABLES } from '../core/DynamoDBStack';
+import { REPORT_TABLE_NAME } from './report/express-app/interfaces';
 
 interface ApiGatewayStackProps extends StackProps {
   userPool: UserPool;

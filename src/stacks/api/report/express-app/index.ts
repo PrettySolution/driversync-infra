@@ -8,7 +8,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import express from 'express';
-import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './serverless';
+import { AuthorizerContext, IReport, QueryStringParameters, REPORT_TABLE_NAME } from './interfaces';
 
 declare global {
   namespace Express {
