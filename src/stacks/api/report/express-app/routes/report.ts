@@ -120,6 +120,11 @@ reportRouter.route('/:timestamp')
     }
   });
 
+reportRouter.param('timestamp', (_req, _res, next, timestamp: string) => {
+  console.debug('run timestamp middleware here', timestamp);
+  next();
+});
+
 export {
   reportRouter,
 };
