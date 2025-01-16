@@ -1,14 +1,14 @@
-### get report
+### get reports (paginated)
 GET {{host}}/api/report?LastEvaluatedKey=1736696290904
 Content-Type: application/json
 Authorization: prettysolution
 
-### get report by id
+### get one report by id
 GET {{host}}/api/report/1736696290904
 Content-Type: application/json
 Authorization: prettysolution
 
-### put report
+### create report
 PUT {{host}}/api/report?hello=world
 Content-Type: application/json
 Authorization: prettysolution
