@@ -13,9 +13,17 @@ export class CognitoStack extends Stack {
   constructor(scope: Construct, id: string, props?: CognitoStackProps) {
     super(scope, id, props);
 
-    this.userPool = new UserPool(this, 'userPool', {});
+    this.userPool = new UserPool(this, 'userPool', {
+      signInAliases: {
+        email: true,
+        username: true,
+        preferredUsername: true,
+      },
+      // users can change their usernames and emails
+      standardAttributes: { preferredUsername: { mutable: true, required: true } },
+    });
     this.userPoolClient = new UserPoolClient(this, 'userPoolClient', {
       userPool: this.userPool,
-    } );
+    });
   }
 }
