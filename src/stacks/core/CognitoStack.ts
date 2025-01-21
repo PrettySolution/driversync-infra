@@ -20,7 +20,10 @@ export class CognitoStack extends Stack {
         preferredUsername: true,
       },
       // users can change their usernames and emails
-      standardAttributes: { preferredUsername: { mutable: true, required: true } },
+      standardAttributes: {
+        preferredUsername: { mutable: true, required: true },
+        email: { mutable: true, required: true },
+      },
     });
     this.userPoolClient = new UserPoolClient(this, 'userPoolClient', {
       userPool: this.userPool,
