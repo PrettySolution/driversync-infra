@@ -34,9 +34,9 @@
     semver "^7.3.8"
 
 "@aws-cdk/cloud-assembly-schema@^39.0.1":
-  version "39.2.2"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-39.2.2.tgz#102a5d58ff99b2e850398faa8875810047a56d9e"
-  integrity sha512-w6OTPy/WI4nyXDRjfuyXeHYJVkRkdam95fc4gf4Xk7O/sFey62BoxFS+HWLlET64FJzTgZAluIQrQAtxPyiS4g==
+  version "39.2.3"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/cloud-assembly-schema/-/cloud-assembly-schema-39.2.3.tgz#7d6f18b55e6b3948e156002764aa1c047e86a0d4"
+  integrity sha512-Fjn5jsMuT+nkJ2RqKyZSunUzDCjc24nyJZ51h6VKFF3I4hCcK1jQE0vSAGRLyppzBbijiyrTbXICa8c7HeRNTg==
   dependencies:
     jsonschema "~1.4.1"
     semver "^7.6.3"
@@ -106,16 +106,16 @@
     "@smithy/util-utf8" "^2.0.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-dynamodb@^3.731.1":
-  version "3.731.1"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.731.1.tgz#d61f99e5fd33ceb5e5bd7fa6bb3de11c17bc3827"
-  integrity sha512-rdvGbusvbcp4NB1gAr9OGYD9cbyxXNAAaq3BopFMmtqUW1vhD+8DXcQYnZBAu93qjr8Nep1qDtysoIp+AeSOjg==
+"@aws-sdk/client-dynamodb@^3.733.0":
+  version "3.733.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.733.0.tgz#c0279b932e40b5702f896fbd585961cd86d67338"
+  integrity sha512-NgqPpI4nqsHKBHWCyd0L0cmJVhc75TTHPCAA7UzOVs2THKQ162xGFAi0gUL8/kgBSA7s5wrBjbpRx+WzhJDJOA==
   dependencies:
     "@aws-crypto/sha256-browser" "5.2.0"
     "@aws-crypto/sha256-js" "5.2.0"
     "@aws-sdk/core" "3.731.0"
     "@aws-sdk/credential-provider-node" "3.731.1"
-    "@aws-sdk/middleware-endpoint-discovery" "3.731.0"
+    "@aws-sdk/middleware-endpoint-discovery" "3.733.0"
     "@aws-sdk/middleware-host-header" "3.731.0"
     "@aws-sdk/middleware-logger" "3.731.0"
     "@aws-sdk/middleware-recursion-detection" "3.731.0"
@@ -326,10 +326,10 @@
     mnemonist "0.38.3"
     tslib "^2.6.2"
 
-"@aws-sdk/middleware-endpoint-discovery@3.731.0":
-  version "3.731.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-endpoint-discovery/-/middleware-endpoint-discovery-3.731.0.tgz#24d1bfc7547b52d7cf2aa50df9721273ce9a3ffd"
-  integrity sha512-LbpVOltiaDQLJV1hmH1eupnowoVXI4U7vLt3T31FQH4Ec24L4CLipYVpaHl0Al+1hgiWZ5xJ+sGTVmtvr/vOnQ==
+"@aws-sdk/middleware-endpoint-discovery@3.733.0":
+  version "3.733.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/middleware-endpoint-discovery/-/middleware-endpoint-discovery-3.733.0.tgz#ae1bdf8d5bf5a0583ea40f3ed1e57dba365d7c0b"
+  integrity sha512-OY6iaig2G0zH/O36BF2JwCtjJ7ECA5bgTkCDSKCHS8JtJLBLlG4Zw6ImaPQy3Ict/5vECem+luQ8j6brfu7log==
   dependencies:
     "@aws-sdk/endpoint-cache" "3.723.0"
     "@aws-sdk/types" "3.731.0"
@@ -456,10 +456,10 @@
     "@smithy/types" "^4.0.0"
     tslib "^2.6.2"
 
-"@aws-sdk/util-dynamodb@^3.731.1":
-  version "3.731.1"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.731.1.tgz#02d11dcfe028a0440c84a4e9b88aa31563f55883"
-  integrity sha512-j7trDplvPjltdu1O95RIU6prXPHQMaU93K+ohJ7L5FE4RHreghIWhzuStEwuQzqC/oBK4CCSFjUQ2zdJaCvZ8g==
+"@aws-sdk/util-dynamodb@^3.733.0":
+  version "3.733.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.733.0.tgz#86f8e22700c9dfb043f1c04f3c6884b216cf96f3"
+  integrity sha512-+aQNVllbGD35QCylLEn6ztl3sHeK5kcy59jCVwlxMpHV464q/lIss5j3mPZXz/8Wm6QKICKKz3t/GVlr2bp00g==
   dependencies:
     tslib "^2.6.2"
 
@@ -2776,9 +2776,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.84"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.84.tgz#8e334ca206bb293a20b16418bf454783365b0a95"
-  integrity sha512-I+DQ8xgafao9Ha6y0qjHHvpZ9OfyA1qKlkHkjywxzniORU2awxyz7f/iVJcULmrF2yrM3nHQf+iDjJtbbexd/g==
+  version "1.5.85"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.85.tgz#07e8d80f5a05268b891e5366bf4f3ba91dfd6d0c"
+  integrity sha512-UgTI7ZHxtSjOUwV0vZLpqT604U1Z8L3bq8mAtAKtuRPlMZ/6dLFMYgYnLdXSi/urbVTP2ykDb9EDDUrdIzw4Qg==
 
 emittery@^0.13.1:
   version "0.13.1"
