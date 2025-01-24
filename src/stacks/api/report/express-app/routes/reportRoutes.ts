@@ -1,23 +1,23 @@
-import express from 'express'
+import express from 'express';
 import {
-    getAllReports,
-    createReport,
-    getReport,
-    updateReport,
-    deleteReport,
-} from '../controllers/reportController'
+  getAllReports,
+  createReport,
+  getReport,
+  updateReport,
+  deleteReport,
+} from '../controllers/reportController';
 
-const router = express.Router()
+const router = express.Router();
 
 // Routes for creating and fetching reports
-router.route('/').post(createReport).get(getAllReports)
+router.route('/').post(createReport).get(getAllReports);
 
 // Routes for report operations (get, update, delete)
 router
-    .route('/:timestamp')
-    .get(getReport) // Fetch a report
-    .put(updateReport) // Update a report
-    .delete(deleteReport) // Delete a report
+  .route('/:timestamp')
+  .get(getReport) // Fetch a report
+  .put(updateReport) // Update a report
+  .delete(deleteReport); // Delete a report
 
 // // Middleware to validate the timestamp parameter
 // router.param('timestamp', (_req, _res, next, timestamp: string) => {
@@ -26,4 +26,4 @@ router
 //     next()
 // })
 
-export default router
+export default router;
