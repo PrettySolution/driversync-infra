@@ -1,0 +1,11 @@
+{
+  "id": "pretty@com",
+  "createdAt": "timestamp",
+  "attributes": {
+    "items": [{
+      "desc": "",
+      "checked": "true",
+    },{},{}],
+    "": ""
+  }
+}
