@@ -17,10 +17,10 @@ const app = express()
 app.use(express.json())
 app.use(loggerMiddleware)
 app.use(authorizerMiddleware)
+
 // routes
 app.use('/api/reports', reportRoutes)
-
-app.route('/api/report/debug').all((req, res) => {
+app.route('/api/reports/debug').all((req, res) => {
     res.json({
         body: req.body,
         query: req.query,

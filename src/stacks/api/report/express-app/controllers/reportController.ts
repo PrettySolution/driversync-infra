@@ -1,6 +1,89 @@
 import { Request, Response } from 'express'
-import * as reportService from '../services/reportService'
+import ReportService from '../services/reportService'
 
+// Create a new report
+export const createReport = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const ownerId = req.requestContext.authorizer.lambda.user
+        const { type } = req.body
+
+        const timestamp = await ReportService.createReport({ ownerId, type })
+
+        res.json({ msg: 'OK', lastEvaluatedKey: timestamp })
+    } catch (error) {
+        console.error('Error creating report: ', error)
+        res.sendStatus(500) // Internal server error
+    }
+}
+
+// Get a report by its timestamp
+export const getReport = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const ownerId = req.requestContext.authorizer.lambda.user
+        const timestamp = req.params.timestamp
+
+        const report = await ReportService.getReport(ownerId, timestamp)
+
+        if (report) {
+            res.json(report) // Send the found report
+        } else {
+            res.status(404).json({ message: 'Report not found' })
+        }
+    } catch (error) {
+        console.error('Error in getReport: ', error)
+        res.sendStatus(500) // Internal server error
+    }
+}
+
+// Update a report
+export const updateReport = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const ownerId = req.requestContext.authorizer.lambda.user
+        const timestamp = req.params.timestamp
+        const { type } = req.body
+
+        const updatedReport = await ReportService.updateReport(
+            ownerId,
+            timestamp,
+            type
+        )
+
+        if (updatedReport) {
+            res.json(updatedReport) // Send the updated report
+        } else {
+            res.status(404).json({ message: 'Report not found' })
+        }
+    } catch (error) {
+        console.error('Error in updateReport: ', error)
+        res.sendStatus(500) // Internal server error
+    }
+}
+
+// Delete a report
+export const deleteReport = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const ownerId = req.requestContext.authorizer.lambda.user
+        const timestamp = req.params.timestamp
+
+        await ReportService.deleteReport(ownerId, timestamp)
+
+        res.json({ message: 'Report deleted successfully' }) // Send success message
+    } catch (error) {
+        console.error('Error in deleteReport: ', error)
+        res.sendStatus(500) // Internal server error
+    }
+}
+
+// Get all reports for a given ownerId with pagination
 export const getAllReports = async (
     req: Request,
     res: Response
@@ -16,7 +99,7 @@ export const getAllReports = async (
 
     try {
         const { items, lastEvaluatedKey: newLastEvaluatedKey } =
-            await reportService.getAllReportsWithPagination({
+            await ReportService.getAllReportsWithPagination({
                 ownerId,
                 limit,
                 lastEvaluatedKey,

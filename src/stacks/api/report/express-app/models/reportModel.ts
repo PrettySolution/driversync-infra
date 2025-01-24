@@ -1,7 +1,6 @@
+export const tableName = process.env.REPORT_TABLE_NAME
 export interface Report {
-    id: string
-    name: string
     timestamp: string
+    ownerId: string
+    type?: string
 }
-
-export const tableName = 'Report'
