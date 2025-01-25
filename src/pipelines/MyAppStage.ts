@@ -1,7 +1,7 @@
 import { GitHubStage, GitHubStageProps } from 'cdk-pipelines-github';
 import { Construct } from 'constructs';
 import { MyAppVersions, ThisEnvironment } from '../interfaces';
-import { ApiGatewayStack } from '../stacks/api/ApiGatewayStack';
+import { ApiGatewayStack } from '../stacks/api-gateway/ApiGatewayStack';
 import { CloudFrontDistributionStack } from '../stacks/CloudFrontDistributionStack';
 import { CognitoStack } from '../stacks/core/CognitoStack';
 import { DynamoDBStack } from '../stacks/core/DynamoDBStack';

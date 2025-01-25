@@ -18,7 +18,7 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { TABLES } from '../core/DynamoDBStack';
-import { REPORT_TABLE_NAME } from './report/express-app/interfaces';
+import { REPORT_TABLE_NAME } from './api/express-app/interfaces';
 
 interface ApiGatewayStackProps extends StackProps {
   userPool: UserPool;
