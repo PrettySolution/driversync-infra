@@ -74,13 +74,7 @@ export class ApiGatewayStack extends Stack {
     });
 
     this.api.addRoutes({
-      path: '/api/report',
-      methods: [HttpMethod.ANY],
-      integration: new HttpLambdaIntegration('integration', report),
-      authorizer: authorizer,
-    });
-    this.api.addRoutes({
-      path: '/api/report/{proxy+}',
+      path: '/api/{proxy+}',
       methods: [HttpMethod.ANY],
       integration: new HttpLambdaIntegration('integration', report),
       authorizer: authorizer,
