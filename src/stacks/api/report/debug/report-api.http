@@ -1,36 +1,35 @@
-### get report
-GET {{host}}/api/report?LastEvaluatedKey=1736696290904
+### get reports (paginated)
+GET {{host}}/api/reports?cursor=1736696290904
 Content-Type: application/json
 Authorization: prettysolution
 
-### get report by id
-GET {{host}}/api/report/1736696290904
+### get one report by id
+GET {{host}}/api/reports/1736696290904
 Content-Type: application/json
 Authorization: prettysolution
 
-### put report
-PUT {{host}}/api/report?hello=world
+### create report
+POST {{host}}/api/reports?hello=world
 Content-Type: application/json
 Authorization: prettysolution
 
 {"type":"default"}
 
-### patch report
-PATCH {{host}}/api/report/1736697686488
+### update report
+PUT {{host}}/api/reports/1736697686488
 Content-Type: application/json
 Authorization: prettysolution
 
 {"type":"custom"}
 
 ### debug put
-PUT {{host}}/api/report/debug?hello=world
+PUT {{host}}/api/reports/debug?hello=world
 Content-Type: application/json
 Authorization: prettysolution
 
 {"type":"default"}
 
-
 ### delete report
-DELETE {{host}}/api/report/1736697686488
+DELETE {{host}}/api/reports/1736697686488
 Content-Type: application/json
 Authorization: prettysolution

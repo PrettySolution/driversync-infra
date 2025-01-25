@@ -1,7 +1,14 @@
 import path from 'path';
 import { Stack, StackProps } from 'aws-cdk-lib';
-import { CorsHttpMethod, HttpApi, HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2';
-import { HttpLambdaAuthorizer, HttpLambdaResponseType } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
+import {
+  CorsHttpMethod,
+  HttpApi,
+  HttpMethod,
+} from 'aws-cdk-lib/aws-apigatewayv2';
+import {
+  HttpLambdaAuthorizer,
+  HttpLambdaResponseType,
+} from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -23,16 +30,31 @@ export class ApiGatewayStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiGatewayStackProps) {
     super(scope, id, props);
 
-    const reportTable = Table.fromTableName(this, 'reportTable', StringParameter.valueForStringParameter(this, TABLES.REPORT_TABLE_PARAMETER_NAME));
+    const reportTable = Table.fromTableName(
+      this,
+      'reportTable',
+      StringParameter.valueForStringParameter(
+        this,
+        TABLES.REPORT_TABLE_PARAMETER_NAME,
+      ),
+    );
 
-    const httpLambdaAuthorizer = new NodejsFunction(this, 'httpLambdaAuthorizer', {
-      runtime: Runtime.NODEJS_20_X,
-      logRetention: RetentionDays.ONE_MONTH,
-    });
+    const httpLambdaAuthorizer = new NodejsFunction(
+      this,
+      'httpLambdaAuthorizer',
+      {
+        runtime: Runtime.NODEJS_20_X,
+        logRetention: RetentionDays.ONE_MONTH,
+      },
+    );
 
-    const authorizer = new HttpLambdaAuthorizer('authorizer', httpLambdaAuthorizer, {
-      responseTypes: [HttpLambdaResponseType.SIMPLE],
-    });
+    const authorizer = new HttpLambdaAuthorizer(
+      'authorizer',
+      httpLambdaAuthorizer,
+      {
+        responseTypes: [HttpLambdaResponseType.SIMPLE],
+      },
+    );
 
     const report = new NodejsFunction(this, 'report', {
       runtime: Runtime.NODEJS_20_X,

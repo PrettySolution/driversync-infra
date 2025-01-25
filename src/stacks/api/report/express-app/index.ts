@@ -2,7 +2,7 @@ import express from 'express';
 import { AuthorizerContext } from './interfaces';
 import { authorizerMiddleware } from './middlewares/authorizerMiddleware';
 import { loggerMiddleware } from './middlewares/loggerMiddleware';
-import { reportRouter } from './routes/report';
+import reportRoutes from './routes/reportRoutes';
 
 declare global {
   namespace Express {
@@ -18,17 +18,15 @@ app.use(express.json());
 app.use(loggerMiddleware);
 app.use(authorizerMiddleware);
 
-
-app.use('/api/report', reportRouter);
-
-app.route('/api/report/debug')
-  .all((req, res) => {
-    res.json({
-      body: req.body,
-      query: req.query,
-      authorizerContext: req.requestContext.authorizer.lambda,
-    });
+// routes
+app.use('/api/reports', reportRoutes);
+app.route('/api/reports/debug').all((req, res) => {
+  res.json({
+    body: req.body,
+    query: req.query,
+    authorizerContext: req.requestContext.authorizer.lambda,
   });
+});
 
 // Export the app for serverless-http
 export default app;
