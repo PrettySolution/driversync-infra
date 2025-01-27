@@ -16,3 +16,12 @@
 1. `export VITE_COGNITO_AUTHORITY=$(aws ssm get-parameter --name "/core/CognitoStack/userPool01/userPoolProviderUrl" --query "Parameter.Value" --output text)`
 2. `export VITE_CLIENT_ID=$(aws ssm get-parameter --name "/core/CognitoStack/userPoolClient01/userPoolClientId" --query "Parameter.Value" --output text)`
 3. `npx projen cdk:dev deploy <name of cloudfront stack> -e`
+
+#### Examples
+```shell
+aws cognito-idp admin-initiate-auth \
+  --user-pool-id us-east-1_JKLmC0DZe \
+  --client-id 6lmvsi2sncou70huiqt893hndq \
+  --auth-flow ADMIN_NO_SRP_AUTH \
+  --auth-parameters USERNAME=user01,PASSWORD=user01
+```
