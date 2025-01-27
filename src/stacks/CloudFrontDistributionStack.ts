@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { DockerImage, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, DockerImage, Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import {
@@ -95,5 +95,8 @@ export class CloudFrontDistributionStack extends Stack {
       zone: hostedZone,
       target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
     });
+
+    new CfnOutput(this, 'authority', { value: props.env.frontend.VITE_COGNITO_AUTHORITY });
+    new CfnOutput(this, 'client_id', { value: props.env.frontend.VITE_CLIENT_ID });
   }
 }
