@@ -15,7 +15,7 @@ import { MyAppVersions } from '../interfaces';
 
 export const myAppVersions: MyAppVersions = {
   driver: {
-    frontend: { version: versions.DriverFrontend['driver-frontend'], commitId: versions.DriverFrontendDynamic.commitId },
+    frontend: { version: versions.DriverFrontend['driversync-web'], commitId: versions.DriverFrontendDynamic.commitId },
   },
 };
 

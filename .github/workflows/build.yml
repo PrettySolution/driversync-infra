@@ -19,11 +19,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Checkout driver-frontend
+      - name: Checkout driversync-web
         uses: actions/checkout@v4
         with:
-          repository: prettysolution/driver-frontend
-          path: driver-frontend
+          repository: prettysolution/driversync-web
+          path: driversync-web
           ref: main
           token: ${{ secrets.PRETTY_READ_PAT }}
       - name: Install dependencies

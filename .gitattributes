@@ -19,7 +19,7 @@
 /cdk.json linguist-generated
 /LICENSE linguist-generated
 /package.json linguist-generated
-/src/ci/driver-frontend-dynamic.json linguist-generated
+/src/ci/driversync-web-dynamic.json linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated
 /yarn.lock linguist-generated

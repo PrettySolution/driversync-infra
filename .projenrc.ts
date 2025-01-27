@@ -7,9 +7,9 @@ import { driverFECheckoutStep } from './src/constants';
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.174.0',
   defaultReleaseBranch: 'main',
-  name: 'driver-infrastructure',
+  name: 'driversync-infra',
   projenrcTs: true,
-  gitignore: ['.idea', 'driver-frontend'],
+  gitignore: ['.idea', 'driversync-web'],
   githubOptions: { projenCredentials: GithubCredentials.fromApp() },
   release: false,
   tsconfig: {
@@ -35,8 +35,8 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   autoApproveUpgrades: true,
 });
 
-const driverFrontCommitId = execSync('git -C driver-frontend rev-parse --short HEAD').toString().trim();
-new JsonFile(project, 'src/ci/driver-frontend-dynamic.json', { obj: { commitId: driverFrontCommitId } });
+const driverFrontCommitId = execSync('git -C driversync-web rev-parse --short HEAD').toString().trim();
+new JsonFile(project, 'src/ci/driversync-web-dynamic.json', { obj: { commitId: driverFrontCommitId } });
 
 const devPipeline: string =
   'cdk -a "npx ts-node -P tsconfig.json --prefer-ts-exts';
