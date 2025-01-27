@@ -47,7 +47,7 @@ export class CognitoStack extends Stack {
     });
     const userPoolClient01 = new UserPoolClient(this, 'userPoolClient01', {
       userPool: userPool01,
-      oAuth: { callbackUrls: [`https://${props.env.subDomain}.${props.env.domainName}/`] },
+      oAuth: { callbackUrls: [`https://${props.env.subDomain}.${props.env.domainName}/`, 'http://localhost:5173/'] },
     });
 
     const userPoolDomain01 = userPool01.addDomain('login01', {
