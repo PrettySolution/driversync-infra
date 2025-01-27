@@ -7,7 +7,7 @@ export const createReport = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const ownerId = req.requestContext.authorizer.lambda.user;
+    const ownerId = req.requestContext.authorizer.jwt.claims.sub;
     const { type } = req.body;
 
     const timestamp = await ReportService.createReport({ ownerId, type });
@@ -22,7 +22,7 @@ export const createReport = async (
 // Get a report by its timestamp
 export const getReport = async (req: Request, res: Response): Promise<void> => {
   try {
-    const ownerId = req.requestContext.authorizer.lambda.user;
+    const ownerId = req.requestContext.authorizer.jwt.claims.sub;
     const timestamp = req.params.timestamp;
 
     const report = await ReportService.getReport(ownerId, timestamp);
@@ -44,7 +44,7 @@ export const updateReport = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const ownerId = req.requestContext.authorizer.lambda.user;
+    const ownerId = req.requestContext.authorizer.jwt.claims.sub;
     const timestamp = req.params.timestamp;
     const { type } = req.body;
 
@@ -71,7 +71,7 @@ export const deleteReport = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const ownerId = req.requestContext.authorizer.lambda.user;
+    const ownerId = req.requestContext.authorizer.jwt.claims.sub;
     const timestamp = req.params.timestamp;
 
     await ReportService.deleteReport(ownerId, timestamp);
@@ -90,7 +90,7 @@ export const getAllReports = async (
 ): Promise<void> => {
   const limit = parseInt(req.query.limit as string, 10) || 2;
   const lastEvaluatedKey = req.query.cursor as string;
-  const ownerId = req.requestContext?.authorizer?.lambda?.user;
+  const ownerId = req.requestContext.authorizer.jwt.claims.sub;
 
   if (!ownerId) {
     res.status(400).json({ message: 'Missing ownerId in request context' });

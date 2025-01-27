@@ -79,8 +79,8 @@ export class GitHubPipelineStack extends Stack {
         domainName: 'prettysolution.com',
         ...domainSettings,
         frontend: {
-          VITE_COGNITO_AUTHORITY: '',
-          VITE_CLIENT_ID: '',
+          VITE_COGNITO_AUTHORITY: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_JKLmC0DZe',
+          VITE_CLIENT_ID: '6lmvsi2sncou70huiqt893hndq',
         },
       },
       versions: myAppVersions,

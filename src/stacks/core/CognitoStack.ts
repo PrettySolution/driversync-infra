@@ -60,6 +60,7 @@ export class CognitoStack extends Stack {
     });
     const userPoolClient01 = new UserPoolClient(this, 'userPoolClient01', {
       userPool: userPool01,
+      authFlows: { adminUserPassword: true },
       oAuth: { callbackUrls: [`https://${props.env.subDomain}.${props.env.domainName}/`, 'http://localhost:5173/'] },
     });
 

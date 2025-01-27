@@ -45,7 +45,7 @@ project.addTask('cdk:dev', {
   requiredEnv: ['CDK_DOMAIN_NAME'],
   exec: `${devPipeline} src/pipelines/DevPipelineApp.ts"`,
   receiveArgs: true,
-  condition: 'aws sts get-caller-identity --query "Account" --output text | grep -Eq \'^(277707141071|268591637005)$\' && exit 1 || exit 0',
+  condition: 'aws sts get-caller-identity --query "Account" --output text | grep -Eq \'^(stage277707141071|268591637005)$\' && exit 1 || exit 0',
 });
 
 project.addTask('express:run', {
