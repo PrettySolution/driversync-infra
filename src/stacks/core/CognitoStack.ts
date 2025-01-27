@@ -1,6 +1,6 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { ManagedLoginVersion, UserPool, UserPoolClient, VerificationEmailStyle } from 'aws-cdk-lib/aws-cognito';
+import { ManagedLoginVersion, UserPool, UserPoolClient, CfnManagedLoginBranding } from 'aws-cdk-lib/aws-cognito';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { UserPoolDomainTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { Construct } from 'constructs';
@@ -49,6 +49,12 @@ export class CognitoStack extends Stack {
     const userPoolDomain = this.userPool.addDomain('login', {
       customDomain: { domainName: `${props.env.loginSubDomain}.${props.env.subDomain}.${props.env.domainName}`, certificate },
       managedLoginVersion: ManagedLoginVersion.NEWER_MANAGED_LOGIN,
+    });
+
+    new CfnManagedLoginBranding(this, 'cfnManagedLoginBranding', {
+      clientId: this.userPoolClient.userPoolClientId,
+      userPoolId: this.userPool.userPoolId,
+      useCognitoProvidedValues: true,
     });
 
     new ARecord(this, 'ARecord', {
