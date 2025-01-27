@@ -65,7 +65,7 @@ export class CognitoStack extends Stack {
     });
 
     new ARecord(this, 'ARecord01', {
-      recordName: `${props.env.loginSubDomain}.${props.env.subDomain}`,
+      recordName: `${props.env.loginSubDomain}-01.${props.env.subDomain}`,
       zone: hostedZone,
       target: RecordTarget.fromAlias(new UserPoolDomainTarget(userPoolDomain01)),
     });
