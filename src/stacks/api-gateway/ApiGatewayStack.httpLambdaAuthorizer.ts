@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { AuthorizerContext } from './report/express-app/interfaces';
+import { AuthorizerContext } from './api-lambda/express-app/interfaces';
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   if (event.headers.authorization) {

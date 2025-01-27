@@ -148,7 +148,7 @@
       ],
       "steps": [
         {
-          "exec": "npx nodemon src/stacks/api/report/server.ts",
+          "exec": "npx nodemon src/stacks/api-gateway/api-lambda/server.ts",
           "receiveArgs": true
         }
       ]
