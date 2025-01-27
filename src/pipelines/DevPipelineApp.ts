@@ -22,6 +22,12 @@ class DevPipelineStack extends Stack {
         domainName: process.env.CDK_DOMAIN_NAME!,
         account: process.env.CDK_DEFAULT_ACCOUNT,
         region: process.env.CDK_DEFAULT_REGION,
+        subDomain: 'driversync',
+        loginSubDomain: 'login',
+        frontend: {
+          VITE_COGNITO_AUTHORITY: process.env.VITE_COGNITO_AUTHORITY!,
+          VITE_CLIENT_ID: process.env.VITE_CLIENT_ID!,
+        },
       },
       versions: myAppVersions,
     }));
