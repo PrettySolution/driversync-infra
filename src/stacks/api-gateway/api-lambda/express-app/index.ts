@@ -1,13 +1,21 @@
+import {
+  APIGatewayProxyCognitoAuthorizer,
+  APIGatewayProxyEventV2WithRequestContext,
+} from 'aws-lambda/trigger/api-gateway-proxy';
 import express from 'express';
-import { AuthorizerContext } from './interfaces';
 import { authorizerMiddleware } from './middlewares/authorizerMiddleware';
 import { loggerMiddleware } from './middlewares/loggerMiddleware';
 import reportRoutes from './routes/reportRoutes';
 
+interface IRequestContext {
+  authorizer: {
+    jwt: APIGatewayProxyCognitoAuthorizer;
+  };
+}
+
 declare global {
   namespace Express {
-    interface Request {
-      requestContext: { authorizer: { lambda: AuthorizerContext } };
+    interface Request extends APIGatewayProxyEventV2WithRequestContext<IRequestContext> {
     }
   }
 }
@@ -24,7 +32,7 @@ app.route('/api/reports/debug').all((req, res) => {
   res.json({
     body: req.body,
     query: req.query,
-    authorizerContext: req.requestContext.authorizer.lambda,
+    requestContext: req.requestContext,
   });
 });
 
