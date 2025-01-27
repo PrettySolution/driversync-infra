@@ -19,6 +19,11 @@ export const myAppVersions: MyAppVersions = {
   },
 };
 
+const domainSettings = {
+  subDomain: 'driversync',
+  loginSubDomain: 'login',
+};
+
 export class GitHubPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
@@ -41,6 +46,11 @@ export class GitHubPipelineStack extends Stack {
         account: STAGE_ACCOUNT,
         region: PRIMARY_REGION,
         domainName: 'stage.prettysolution.com',
+        ...domainSettings,
+        frontend: {
+          VITE_COGNITO_AUTHORITY: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_GUWs2PUMx',
+          VITE_CLIENT_ID: '611lkt5l23qksdlghfmq6vgj45',
+        },
       },
       versions: myAppVersions,
     });
@@ -67,6 +77,11 @@ export class GitHubPipelineStack extends Stack {
         account: PROD_ACCOUNT,
         region: PRIMARY_REGION,
         domainName: 'prettysolution.com',
+        ...domainSettings,
+        frontend: {
+          VITE_COGNITO_AUTHORITY: '',
+          VITE_CLIENT_ID: '',
+        },
       },
       versions: myAppVersions,
     });

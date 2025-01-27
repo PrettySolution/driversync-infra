@@ -26,7 +26,6 @@ export class CloudFrontDistributionStack extends Stack {
   constructor(scope: Construct, id: string, props: CloudFrontDistributionStackProps) {
     super(scope, id, props);
 
-    const subDomain = 'driversync';
     const version = props.versions.driver.frontend.version;
     const commitId = props.versions.driver.frontend.commitId;
 
@@ -59,7 +58,7 @@ export class CloudFrontDistributionStack extends Stack {
           originRequestPolicy: OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
         },
       },
-      domainNames: [`${subDomain}.${hostedZone.zoneName}`],
+      domainNames: [`${props.env.subDomain}.${hostedZone.zoneName}`],
       certificate: cert,
       errorResponses: [
         { httpStatus: 404, responseHttpStatus: 200, responsePagePath: '/index.html', ttl: Duration.minutes(5) },
@@ -76,7 +75,8 @@ export class CloudFrontDistributionStack extends Stack {
             user: 'root:root',
             command: ['sh', '-c', 'npm i && npm run build && cp -R ./dist/* /asset-output/'],
             environment: {
-              REACT_APP_HELLO: 'World',
+              VITE_REDIRECT_URI: `https://${props.env.subDomain}.${props.env.domainName}/`,
+              ...props.env.frontend,
             },
           },
           // assetHash: AssetHashType.SOURCE,
@@ -91,7 +91,7 @@ export class CloudFrontDistributionStack extends Stack {
     });
 
     new ARecord(this, 'ARecord', {
-      recordName: subDomain,
+      recordName: props.env.subDomain,
       zone: hostedZone,
       target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
     });
