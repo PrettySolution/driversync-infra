@@ -1,35 +1,35 @@
 ### get reports (paginated)
 GET {{host}}/api/reports?cursor=1736696290904
 Content-Type: application/json
-Authorization: prettysolution
+Authorization: Bearer token
 
 ### get one report by id
-GET {{host}}/api/reports/1736696290904
+GET {{host}}/api/reports/1738014336625
 Content-Type: application/json
-Authorization: prettysolution
+Authorization: Bearer token
 
 ### create report
 POST {{host}}/api/reports?hello=world
 Content-Type: application/json
-Authorization: prettysolution
+Authorization: Bearer token
 
 {"type":"default"}
 
 ### update report
 PUT {{host}}/api/reports/1736697686488
 Content-Type: application/json
-Authorization: prettysolution
+Authorization: Bearer token
 
 {"type":"custom"}
 
 ### debug put
 PUT {{host}}/api/reports/debug?hello=world
 Content-Type: application/json
-Authorization: prettysolution
+Authorization: Bearer token
 
 {"type":"default"}
 
 ### delete report
 DELETE {{host}}/api/reports/1736697686488
 Content-Type: application/json
-Authorization: prettysolution
+Authorization: Bearer token
