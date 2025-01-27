@@ -3,6 +3,7 @@ import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatem
 import { ManagedLoginVersion, UserPool, UserPoolClient, CfnManagedLoginBranding } from 'aws-cdk-lib/aws-cognito';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { UserPoolDomainTarget } from 'aws-cdk-lib/aws-route53-targets';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ThisEnvironment } from '../../interfaces';
 
@@ -62,6 +63,10 @@ export class CognitoStack extends Stack {
       zone: hostedZone,
       target: RecordTarget.fromAlias(new UserPoolDomainTarget(userPoolDomain)),
     });
+
+    // These used in Readme.md
+    new StringParameter(this, 'userPoolProviderUrl', { parameterName: '/core/CognitoStack/userPool/userPoolProviderUrl', stringValue: this.userPool.userPoolProviderUrl });
+    new StringParameter(this, 'userPoolClientId', { parameterName: '/core/CognitoStack/userPoolClient/userPoolClientId', stringValue: this.userPoolClient.userPoolClientId });
 
   }
 }
