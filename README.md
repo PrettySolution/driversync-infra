@@ -23,5 +23,12 @@ aws cognito-idp admin-initiate-auth \
   --user-pool-id us-east-1_JKLmC0DZe \
   --client-id 6lmvsi2sncou70huiqt893hndq \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME=user01,PASSWORD=user01
+  --auth-parameters USERNAME=user01,PASSWORD=user01 | cat
+```
+```shell
+aws cognito-idp admin-set-user-password \
+  --user-pool-id us-east-1_GUWs2PUMx \
+  --username user01 \
+  --password user01 \
+  --permanent | cat
 ```
