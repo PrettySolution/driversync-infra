@@ -10,10 +10,12 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
+import { ThisEnvironment } from '../../interfaces';
 import { TABLES } from '../core/DynamoDBStack';
 import { REPORT_TABLE_NAME } from './api-lambda/express-app/interfaces';
 
 interface ApiGatewayStackProps extends StackProps {
+  env: ThisEnvironment;
 }
 
 export class ApiGatewayStack extends Stack {
@@ -23,8 +25,8 @@ export class ApiGatewayStack extends Stack {
     super(scope, id, props);
 
     const reportTable = Table.fromTableName(this, 'reportTable', StringParameter.valueForStringParameter(this, TABLES.REPORT_TABLE_PARAMETER_NAME));
-    const userPool = UserPool.fromUserPoolId(this, 'userPool', StringParameter.valueForStringParameter(this, '/core/CognitoStack/userPool01/userPoolProviderUrl'));
-    const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', StringParameter.valueForStringParameter(this, '/core/CognitoStack/userPoolClient01/userPoolClientId'));
+    const userPool = UserPool.fromUserPoolId(this, 'userPool', props.env.frontend.VITE_COGNITO_AUTHORITY.split('/').pop()!);
+    const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', props.env.frontend.VITE_CLIENT_ID);
 
     // const httpLambdaAuthorizer = new NodejsFunction(this, 'httpLambdaAuthorizer', {
     //   runtime: Runtime.NODEJS_20_X,
