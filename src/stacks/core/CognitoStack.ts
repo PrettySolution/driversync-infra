@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
 import {
   CfnManagedLoginBranding,
@@ -93,5 +93,7 @@ export class CognitoStack extends Stack {
       stringValue: userPoolClient01.userPoolClientId,
     });
 
+    new CfnOutput(this, 'authority', { value: userPool01.userPoolProviderUrl });
+    new CfnOutput(this, 'client_id', { value: userPoolClient01.userPoolClientId });
   }
 }
