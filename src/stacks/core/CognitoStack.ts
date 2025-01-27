@@ -1,6 +1,12 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { ManagedLoginVersion, UserPool, UserPoolClient, CfnManagedLoginBranding } from 'aws-cdk-lib/aws-cognito';
+import {
+  CfnManagedLoginBranding,
+  ManagedLoginVersion,
+  UserPool,
+  UserPoolClient,
+} from 'aws-cdk-lib/aws-cognito';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { UserPoolDomainTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -25,6 +31,12 @@ export class CognitoStack extends Stack {
       subjectAlternativeNames: [`*.${props.env.subDomain}.${props.env.domainName}`],
     });
 
+    const preSignUpLambda01 = new Function(this, 'preSignUpLambda01', {
+      runtime: Runtime.PYTHON_3_13,
+      handler: 'index.lambda_handler',
+      code: Code.fromInline('def lambda_handler(event, context): event["response"]["autoConfirmUser"] = True; return event'),
+    });
+
     const userPool01 = new UserPool(this, 'userPool01', {
       userPoolName: 'simple-userPool01',
       // signInAliases: {
@@ -36,6 +48,7 @@ export class CognitoStack extends Stack {
       //   preferredUsername: { mutable: true, required: true },
       //   email: { mutable: true, required: true },
       // },
+      lambdaTriggers: { preSignUp: preSignUpLambda01 },
       selfSignUpEnabled: true,
       passwordPolicy: {
         minLength: 6,
