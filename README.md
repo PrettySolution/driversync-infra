@@ -1,5 +1,5 @@
 #### Set up DEV in your account
-1. `ln -s ../driver-frontend driver-frontend` # create link to frontend directory
+1. `ln -s ../driversync-web driversync-web` # create link to frontend directory
 2. `aws configure --profile ps_dev` # configure your DEV aws profile
 3. `asp ps_dev` # activate 
 4. `export CDK_DOMAIN_NAME=vh.prettysolution.com` # set hosted zone, must exist in route53 in your ps_dev account

@@ -11,12 +11,12 @@ export const CONNECTION_ARN = 'arn:aws:codestar-connections:us-east-1:5363092909
 export const GH_SUPPORT_DEPLOY_ROLE_NAME = 'GithubSupport-DeployRole';
 
 export const driverFECheckoutStep: JobStep = {
-  name: 'Checkout driver-frontend',
+  name: 'Checkout driversync-web',
   uses: 'actions/checkout@v4',
   with: {
-    repository: 'prettysolution/driver-frontend',
-    path: 'driver-frontend',
-    ref: versions.DriverFrontend['driver-frontend'],
+    repository: 'prettysolution/driversync-web',
+    path: 'driversync-web',
+    ref: versions.DriverFrontend['driversync-web'],
     token: '${{ secrets.PRETTY_READ_PAT }}',
   },
 };

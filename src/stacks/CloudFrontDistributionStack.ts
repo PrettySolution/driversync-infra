@@ -69,7 +69,7 @@ export class CloudFrontDistributionStack extends Stack {
 
     new BucketDeployment(this, 'BucketDeployment', {
       sources: [
-        Source.asset(path.join(process.cwd(), 'driver-frontend'), {
+        Source.asset(path.join(process.cwd(), 'driversync-web'), {
           bundling: {
             // image: DockerImage.fromRegistry('public.ecr.aws/docker/library/node:20.18.1'),
             image: DockerImage.fromRegistry('node:20.18.1'),
