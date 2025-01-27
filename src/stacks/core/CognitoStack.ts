@@ -1,6 +1,12 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
 import { Certificate, CertificateValidation } from 'aws-cdk-lib/aws-certificatemanager';
-import { ManagedLoginVersion, UserPool, UserPoolClient, CfnManagedLoginBranding } from 'aws-cdk-lib/aws-cognito';
+import {
+  CfnManagedLoginBranding,
+  ManagedLoginVersion,
+  UserPool,
+  UserPoolClient,
+} from 'aws-cdk-lib/aws-cognito';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { UserPoolDomainTarget } from 'aws-cdk-lib/aws-route53-targets';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -13,8 +19,6 @@ interface CognitoStackProps extends StackProps {
 }
 
 export class CognitoStack extends Stack {
-  public readonly userPool: UserPool;
-  public readonly userPoolClient: UserPoolClient;
 
   constructor(scope: Construct, id: string, props: CognitoStackProps) {
     super(scope, id, props);
@@ -24,49 +28,72 @@ export class CognitoStack extends Stack {
     const certificate = new Certificate(this, 'Certificate', {
       validation: CertificateValidation.fromDns(hostedZone),
       domainName: hostedZone.zoneName,
-      subjectAlternativeNames: [`${props.env.loginSubDomain}.${props.env.subDomain}.${props.env.domainName}`],
+      subjectAlternativeNames: [`*.${props.env.subDomain}.${props.env.domainName}`],
     });
 
-    this.userPool = new UserPool(this, 'userPool', {
-      signInAliases: {
-        email: true,
-        username: true,
-        preferredUsername: true,
-      },
-      // users can change their usernames and emails
-      standardAttributes: {
-        preferredUsername: { mutable: true, required: true },
-        email: { mutable: true, required: true },
-      },
+    const preSignUpLambda01 = new Function(this, 'preSignUpLambda01', {
+      runtime: Runtime.PYTHON_3_13,
+      handler: 'index.lambda_handler',
+      code: Code.fromInline('def lambda_handler(event, context): event["response"]["autoConfirmUser"] = True; return event'),
+    });
+
+    const userPool01 = new UserPool(this, 'userPool01', {
+      userPoolName: 'simple-userPool01',
+      // signInAliases: {
+      //   email: true,
+      //   username: true,
+      //   preferredUsername: true,
+      // },
+      // standardAttributes: {
+      //   preferredUsername: { mutable: true, required: true },
+      //   email: { mutable: true, required: true },
+      // },
+      lambdaTriggers: { preSignUp: preSignUpLambda01 },
       selfSignUpEnabled: true,
-    });
-    this.userPoolClient = new UserPoolClient(this, 'userPoolClient', {
-      userPool: this.userPool,
-      oAuth: {
-        callbackUrls: [`https://${props.env.subDomain}.${props.env.domainName}/`],
+      passwordPolicy: {
+        minLength: 6,
+        requireDigits: false,
+        requireLowercase: false,
+        requireSymbols: false,
+        requireUppercase: false,
       },
     });
+    const userPoolClient01 = new UserPoolClient(this, 'userPoolClient01', {
+      userPool: userPool01,
+      oAuth: { callbackUrls: [`https://${props.env.subDomain}.${props.env.domainName}/`, 'http://localhost:5173/'] },
+    });
 
-    const userPoolDomain = this.userPool.addDomain('login', {
-      customDomain: { domainName: `${props.env.loginSubDomain}.${props.env.subDomain}.${props.env.domainName}`, certificate },
+    const userPoolDomain01 = userPool01.addDomain('login01', {
+      customDomain: {
+        domainName: `${props.env.loginSubDomain}-01.${props.env.subDomain}.${props.env.domainName}`,
+        certificate,
+      },
       managedLoginVersion: ManagedLoginVersion.NEWER_MANAGED_LOGIN,
     });
 
-    new CfnManagedLoginBranding(this, 'cfnManagedLoginBranding', {
-      clientId: this.userPoolClient.userPoolClientId,
-      userPoolId: this.userPool.userPoolId,
+    new CfnManagedLoginBranding(this, 'cfnManagedLoginBranding01', {
+      clientId: userPoolClient01.userPoolClientId,
+      userPoolId: userPool01.userPoolId,
       useCognitoProvidedValues: true,
     });
 
-    new ARecord(this, 'ARecord', {
-      recordName: `${props.env.loginSubDomain}.${props.env.subDomain}`,
+    new ARecord(this, 'ARecord01', {
+      recordName: `${props.env.loginSubDomain}-01.${props.env.subDomain}`,
       zone: hostedZone,
-      target: RecordTarget.fromAlias(new UserPoolDomainTarget(userPoolDomain)),
+      target: RecordTarget.fromAlias(new UserPoolDomainTarget(userPoolDomain01)),
     });
 
     // These used in Readme.md
-    new StringParameter(this, 'userPoolProviderUrl', { parameterName: '/core/CognitoStack/userPool/userPoolProviderUrl', stringValue: this.userPool.userPoolProviderUrl });
-    new StringParameter(this, 'userPoolClientId', { parameterName: '/core/CognitoStack/userPoolClient/userPoolClientId', stringValue: this.userPoolClient.userPoolClientId });
+    new StringParameter(this, 'userPoolProviderUrl01', {
+      parameterName: '/core/CognitoStack/userPool01/userPoolProviderUrl',
+      stringValue: userPool01.userPoolProviderUrl,
+    });
+    new StringParameter(this, 'userPoolClientId01', {
+      parameterName: '/core/CognitoStack/userPoolClient01/userPoolClientId',
+      stringValue: userPoolClient01.userPoolClientId,
+    });
 
+    new CfnOutput(this, 'authority', { value: userPool01.userPoolProviderUrl });
+    new CfnOutput(this, 'client_id', { value: userPoolClient01.userPoolClientId });
   }
 }

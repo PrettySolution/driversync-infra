@@ -3,7 +3,6 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { CorsHttpMethod, HttpApi, HttpMethod } from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaAuthorizer, HttpLambdaResponseType } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
-import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -14,7 +13,6 @@ import { TABLES } from '../core/DynamoDBStack';
 import { REPORT_TABLE_NAME } from './api-lambda/express-app/interfaces';
 
 interface ApiGatewayStackProps extends StackProps {
-  userPool: UserPool;
 }
 
 export class ApiGatewayStack extends Stack {

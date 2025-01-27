@@ -13,6 +13,6 @@
 4. [test your api](src/stacks/api-gateway/api-lambda/debug/report-api.http)
 
 #### deploy cloudfront
-1. `export VITE_COGNITO_AUTHORITY=$(aws ssm get-parameter --name "/core/CognitoStack/userPool/userPoolProviderUrl" --query "Parameter.Value" --output text)`
-2. `export VITE_CLIENT_ID=$(aws ssm get-parameter --name "/core/CognitoStack/userPoolClient/userPoolClientId" --query "Parameter.Value" --output text)`
+1. `export VITE_COGNITO_AUTHORITY=$(aws ssm get-parameter --name "/core/CognitoStack/userPool01/userPoolProviderUrl" --query "Parameter.Value" --output text)`
+2. `export VITE_CLIENT_ID=$(aws ssm get-parameter --name "/core/CognitoStack/userPoolClient01/userPoolClientId" --query "Parameter.Value" --output text)`
 3. `npx projen cdk:dev deploy <name of cloudfront stack> -e`
