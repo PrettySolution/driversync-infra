@@ -28,7 +28,7 @@ export class CognitoStack extends Stack {
     const certificate = new Certificate(this, 'Certificate', {
       validation: CertificateValidation.fromDns(hostedZone),
       domainName: hostedZone.zoneName,
-      subjectAlternativeNames: [`*.${props.env.subDomain}.${props.env.domainName}`],
+      subjectAlternativeNames: [`*.${props.env.domainName}`],
     });
 
     const preSignUpLambda01 = new Function(this, 'preSignUpLambda01', {
@@ -66,7 +66,9 @@ export class CognitoStack extends Stack {
 
     const userPoolDomain01 = userPool01.addDomain('login01', {
       customDomain: {
-        domainName: `${props.env.loginSubDomain}-01.${props.env.subDomain}.${props.env.domainName}`,
+        // Custom domain is not a valid subdomain: Was not able to resolve a DNS A record for the parent domain or domain parent is a top-level domain.
+        // domainName: `${props.env.loginSubDomain}-01.${props.env.subDomain}.${props.env.domainName}`,
+        domainName: `${props.env.loginSubDomain}-01-${props.env.subDomain}.${props.env.domainName}`,
         certificate,
       },
       managedLoginVersion: ManagedLoginVersion.NEWER_MANAGED_LOGIN,
@@ -79,7 +81,7 @@ export class CognitoStack extends Stack {
     });
 
     new ARecord(this, 'ARecord01', {
-      recordName: `${props.env.loginSubDomain}-01.${props.env.subDomain}`,
+      recordName: `${props.env.loginSubDomain}-01-${props.env.subDomain}`,
       zone: hostedZone,
       target: RecordTarget.fromAlias(new UserPoolDomainTarget(userPoolDomain01)),
     });
