@@ -75,7 +75,7 @@ export class CloudFrontDistributionStack extends Stack {
             user: 'root:root',
             command: ['sh', '-c', 'npm i && npm run build && cp -R ./dist/* /asset-output/'],
             environment: {
-              VITE_REDIRECT_URI: `https://${props.env.subDomain}.${props.env.domainName}/`,
+              VITE_COGNITO_REDIRECT_URI: `https://${props.env.subDomain}.${props.env.domainName}/`,
               ...props.env.frontend,
             },
           },
@@ -97,6 +97,6 @@ export class CloudFrontDistributionStack extends Stack {
     });
 
     new CfnOutput(this, 'authority', { value: props.env.frontend.VITE_COGNITO_AUTHORITY });
-    new CfnOutput(this, 'client_id', { value: props.env.frontend.VITE_CLIENT_ID });
+    new CfnOutput(this, 'client_id', { value: props.env.frontend.VITE_COGNITO_CLIENT_ID });
   }
 }
