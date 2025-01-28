@@ -49,7 +49,7 @@ export class GitHubPipelineStack extends Stack {
         ...domainSettings,
         frontend: {
           VITE_COGNITO_AUTHORITY: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_JKLmC0DZe',
-          VITE_CLIENT_ID: '6lmvsi2sncou70huiqt893hndq',
+          VITE_COGNITO_CLIENT_ID: '6lmvsi2sncou70huiqt893hndq',
         },
       },
       versions: myAppVersions,
@@ -80,7 +80,7 @@ export class GitHubPipelineStack extends Stack {
         ...domainSettings,
         frontend: {
           VITE_COGNITO_AUTHORITY: 'https://cognito-idp.us-east-1.amazonaws.com/us-east-1_JKLmC0DZe',
-          VITE_CLIENT_ID: '6lmvsi2sncou70huiqt893hndq',
+          VITE_COGNITO_CLIENT_ID: '6lmvsi2sncou70huiqt893hndq',
         },
       },
       versions: myAppVersions,

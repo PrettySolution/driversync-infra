@@ -26,7 +26,7 @@ export class ApiGatewayStack extends Stack {
 
     const reportTable = Table.fromTableName(this, 'reportTable', StringParameter.valueForStringParameter(this, TABLES.REPORT_TABLE_PARAMETER_NAME));
     const userPool = UserPool.fromUserPoolId(this, 'userPool', props.env.frontend.VITE_COGNITO_AUTHORITY.split('/').pop()!);
-    const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', props.env.frontend.VITE_CLIENT_ID);
+    const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', props.env.frontend.VITE_COGNITO_CLIENT_ID);
 
     // const httpLambdaAuthorizer = new NodejsFunction(this, 'httpLambdaAuthorizer', {
     //   runtime: Runtime.NODEJS_20_X,

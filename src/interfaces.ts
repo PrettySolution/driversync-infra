@@ -6,7 +6,7 @@ export interface ThisEnvironment extends Environment {
   loginSubDomain: string;
   frontend: {
     VITE_COGNITO_AUTHORITY: string;
-    VITE_CLIENT_ID: string;
+    VITE_COGNITO_CLIENT_ID: string;
   };
 }
 
