@@ -1,12 +1,11 @@
 import {
   DeleteItemCommand,
   GetItemCommand,
-  PutItemCommand,
   QueryCommand,
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
-import { PutCommand, PutCommandInput, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import ddbClient, { docClient } from '../config/dynamoDB';
@@ -24,30 +23,36 @@ class ReportService {
 
   // Create a new report
   async createReport(props: ReportProps): Promise<Report> {
+
     const id = nanoid();
+    const timestamp = Date.now();
 
     const report: Report = {
       reportId: id,
       vehicleId: props.vehicleId,
       driverId: props.username,
       checklist: { oil: 0, brake: 1, tair: 2 },
-      timestamp: Date.now(),
+      timestamp,
     };
 
+    const reportId = `REPORT#${id}`;
+    const driverId = `DRIVER#${report.driverId}`;
+    const vehicleId = `VEHICLE#${report.vehicleId}`;
+
     const reportItem = {
-      pk: `REPORT#${report.reportId}`,
-      sk: `#${report.timestamp}#VEHICLE#${report.vehicleId}#DRIVER#${report.driverId}&REPORT#${report.reportId}`,
+      pk: reportId,
+      sk: `#${timestamp}#${vehicleId}#${driverId}&${reportId}`,
       gsi1pk: 'REPORTS$',
       data: report.checklist,
     };
     const reportsOfDriverItem = {
-      pk: `REPORT#${report.reportId}`,
-      sk: `DRIVER#${report.driverId}#${report.timestamp}&VEHICLE#${report.reportId}`,
+      pk: reportId,
+      sk: `${driverId}#${timestamp}&${reportId}`,
       gsi1pk: 'REPORTS|DRIVER$',
     };
     const reportsOfVehicleItem = {
-      pk: `VEHICLE#${report.reportId}`,
-      sk: `VEHICLE#${report.vehicleId}#${report.timestamp}&REPORT#${report.reportId}`,
+      pk: reportId,
+      sk: `${vehicleId}#${timestamp}&${reportId}`,
       gsi1pk: 'REPORTS|VEHICLE$',
     };
     const items = [reportItem, reportsOfDriverItem, reportsOfVehicleItem];
