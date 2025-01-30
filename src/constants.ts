@@ -20,3 +20,11 @@ export const driverFECheckoutStep: JobStep = {
     token: '${{ secrets.PRETTY_READ_PAT }}',
   },
 };
+
+export const setNodeJSv22: JobStep = {
+  name: 'Setup Node.js',
+  uses: 'actions/setup-node@v4',
+  with: {
+    'node-version': '22',
+  },
+};
