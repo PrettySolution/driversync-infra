@@ -7,12 +7,12 @@ export const createReport = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const ownerId = req.requestContext.authorizer.jwt.claims.username;
-    const { type } = req.body;
+    const username = req.requestContext.authorizer.jwt.claims.username;
+    const { vehicleId } = req.body;
 
-    const timestamp = await ReportService.createReport({ ownerId, type });
+    const data = await ReportService.createReport({ username, vehicleId });
 
-    res.json({ msg: 'OK', lastEvaluatedKey: timestamp });
+    res.json({ msg: 'OK', data: data });
   } catch (error) {
     console.error('Error creating report: ', error);
     res.sendStatus(500); // Internal server error
