@@ -23,7 +23,7 @@ class ReportService {
   private readonly tableName: string | undefined = tableName;
 
   // Create a new report
-  async createReport(props: ReportProps): Promise<Record<string, any>> {
+  async createReport(props: ReportProps): Promise<Report> {
     const id = nanoid();
 
     const report: Report = {
