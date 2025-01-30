@@ -144,7 +144,7 @@
       "name": "express:run",
       "requiredEnv": [
         "AWS_PROFILE_REGION",
-        "REPORT_TABLE_NAME"
+        "BASE_TABLE_NAME"
       ],
       "steps": [
         {

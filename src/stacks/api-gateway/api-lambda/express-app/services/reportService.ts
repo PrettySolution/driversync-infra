@@ -25,8 +25,8 @@ class ReportService {
     type: string;
   }): Promise<string> {
     const report: Report = {
-      timestamp: Date.now().toString(),
       ownerId: reportData.ownerId,
+      timestamp: Date.now().toString(),
       type: reportData.type,
     };
 

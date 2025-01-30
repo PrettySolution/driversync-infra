@@ -50,7 +50,7 @@ project.addTask('cdk:dev', {
 });
 
 project.addTask('express:run', {
-  requiredEnv: ['AWS_PROFILE_REGION', 'REPORT_TABLE_NAME'],
+  requiredEnv: ['AWS_PROFILE_REGION', 'BASE_TABLE_NAME'],
   exec: 'npx nodemon src/stacks/api-gateway/api-lambda/server.ts',
   receiveArgs: true,
 });

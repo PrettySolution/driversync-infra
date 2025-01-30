@@ -1,4 +1,4 @@
-export const REPORT_TABLE_NAME: string = 'REPORT_TABLE_NAME';
+export const BASE_TABLE_NAME: string = 'BASE_TABLE_NAME';
 
 export interface AuthorizerContext {
   user: string;

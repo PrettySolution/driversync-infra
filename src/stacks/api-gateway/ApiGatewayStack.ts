@@ -12,7 +12,7 @@ import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { ThisEnvironment } from '../../interfaces';
 import { TABLES } from '../core/DynamoDBStack';
-import { REPORT_TABLE_NAME } from './api-lambda/express-app/interfaces';
+import { BASE_TABLE_NAME } from './api-lambda/express-app/interfaces';
 
 interface ApiGatewayStackProps extends StackProps {
   env: ThisEnvironment;
@@ -24,7 +24,7 @@ export class ApiGatewayStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiGatewayStackProps) {
     super(scope, id, props);
 
-    const reportTable = Table.fromTableName(this, 'reportTable', StringParameter.valueForStringParameter(this, TABLES.REPORT_TABLE_PARAMETER_NAME));
+    const baseTable = Table.fromTableName(this, 'baseTable', StringParameter.valueForStringParameter(this, TABLES.BASE_TABLE_PARAMETER_NAME));
     const userPool = UserPool.fromUserPoolId(this, 'userPool', props.env.frontend.VITE_COGNITO_AUTHORITY.split('/').pop()!);
     const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', props.env.frontend.VITE_COGNITO_CLIENT_ID);
 
@@ -42,7 +42,7 @@ export class ApiGatewayStack extends Stack {
       runtime: Runtime.NODEJS_20_X,
       entry: path.join(__dirname, './api-lambda/serverless.ts'),
       logRetention: RetentionDays.ONE_MONTH,
-      environment: { [REPORT_TABLE_NAME]: reportTable.tableName },
+      environment: { [BASE_TABLE_NAME]: baseTable.tableName },
       // timeout: Duration.seconds(15),
     });
 
@@ -76,6 +76,6 @@ export class ApiGatewayStack extends Stack {
     });
 
 
-    reportTable.grantReadWriteData(apiLambda);
+    baseTable.grantReadWriteData(apiLambda);
   }
 }

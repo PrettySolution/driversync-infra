@@ -1,7 +1,7 @@
 ### get reports (paginated)
 GET {{host}}/api/reports?cursor=1736696290904
 Content-Type: application/json
-Authorization: Bearer token
+Authorization: Bearer {{token}}
 
 ### get one report by id
 GET {{host}}/api/reports/1738014336625
@@ -11,7 +11,7 @@ Authorization: Bearer token
 ### create report
 POST {{host}}/api/reports?hello=world
 Content-Type: application/json
-Authorization: Bearer token
+Authorization: Bearer {{token}}
 
 {"type":"default"}
 
