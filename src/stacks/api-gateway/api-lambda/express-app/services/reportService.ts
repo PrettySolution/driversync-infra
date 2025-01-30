@@ -18,7 +18,7 @@ export interface IGetAllReportsWithPagination {
   lastEvaluatedKey?: string;
 }
 
-export enum GSI1PK {
+export enum REPORTS_GSI1 {
   REPORTS = 'REPORTS$',
   REPORTS_OF_DRIVER = 'REPORTS|DRIVER$',
   REPORTS_OF_VEHICLE = 'REPORTS|VEHICLE$',
@@ -54,18 +54,18 @@ class ReportService {
     const rawReportItem = {
       pk: rawReportId,
       sk: `#${timestamp}#${rawVehicleId}#${rawDriverId}&${rawReportId}`,
-      gsi1pk: GSI1PK.REPORTS,
+      gsi1pk: REPORTS_GSI1.REPORTS,
       data: report.checklist,
     };
     const rawReportsOfDriverItem = {
       pk: rawReportId,
       sk: `${rawDriverId}#${timestamp}&${rawReportId}`,
-      gsi1pk: GSI1PK.REPORTS_OF_DRIVER,
+      gsi1pk: REPORTS_GSI1.REPORTS_OF_DRIVER,
     };
     const rawReportsOfVehicleItem = {
       pk: rawReportId,
       sk: `${rawVehicleId}#${timestamp}&${rawReportId}`,
-      gsi1pk: GSI1PK.REPORTS_OF_VEHICLE,
+      gsi1pk: REPORTS_GSI1.REPORTS_OF_VEHICLE,
     };
     const items = [rawReportItem, rawReportsOfDriverItem, rawReportsOfVehicleItem];
 
