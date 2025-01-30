@@ -8,7 +8,7 @@ import {
   driverFECheckoutStep,
   GH_SUPPORT_DEPLOY_ROLE_NAME,
   PRIMARY_REGION,
-  PROD_ACCOUNT,
+  PROD_ACCOUNT, setNodeJSv22,
   STAGE_ACCOUNT,
 } from '../constants';
 import { MyAppVersions } from '../interfaces';
@@ -39,7 +39,7 @@ export class GitHubPipelineStack extends Stack {
       awsCreds: AwsCredentials.fromOpenIdConnect({
         gitHubActionRoleArn: `arn:aws:iam::${STAGE_ACCOUNT}:role/${GH_SUPPORT_DEPLOY_ROLE_NAME}`,
       }),
-      preBuildSteps: [driverFECheckoutStep],
+      preBuildSteps: [setNodeJSv22, driverFECheckoutStep],
     });
     const stage = new MyAppStage(this, 'driver-stage', {
       env: {
@@ -70,7 +70,7 @@ export class GitHubPipelineStack extends Stack {
       workflowPath: '.github/workflows/deploy-prod.yml',
       workflowName: 'deploy-prod',
       workflowTriggers: { push: { branches: ['prod'] } },
-      preBuildSteps: [driverFECheckoutStep],
+      preBuildSteps: [setNodeJSv22, driverFECheckoutStep],
     });
     const prod = new MyAppStage(this, 'driver-prod', {
       env: {
