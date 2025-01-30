@@ -29,7 +29,7 @@ export class ApiGatewayStack extends Stack {
     const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', props.env.frontend.VITE_COGNITO_CLIENT_ID);
 
     // const httpLambdaAuthorizer = new NodejsFunction(this, 'httpLambdaAuthorizer', {
-    //   runtime: Runtime.NODEJS_20_X,
+    //   runtime: Runtime.NODEJS_22_X,
     //   logRetention: RetentionDays.ONE_MONTH,
     // });
 
@@ -39,7 +39,7 @@ export class ApiGatewayStack extends Stack {
     });
 
     const apiLambda = new NodejsFunction(this, 'apiLambda', {
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_22_X,
       entry: path.join(__dirname, './api-lambda/serverless.ts'),
       logRetention: RetentionDays.ONE_MONTH,
       environment: { [BASE_TABLE_NAME]: baseTable.tableName },
