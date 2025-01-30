@@ -6,6 +6,7 @@ import { driverFECheckoutStep } from './src/constants';
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '2.177.0',
+  minNodeVersion: '22',
   defaultReleaseBranch: 'main',
   name: 'driversync-infra',
   projenrcTs: true,
