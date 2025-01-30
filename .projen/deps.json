@@ -15,6 +15,7 @@
     },
     {
       "name": "@types/node",
+      "version": "^22",
       "type": "build"
     },
     {
@@ -83,6 +84,10 @@
       "type": "runtime"
     },
     {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
       "name": "@aws-sdk/util-dynamodb",
       "type": "runtime"
     },
@@ -96,7 +101,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.174.0",
+      "version": "^2.177.0",
       "type": "runtime"
     },
     {
@@ -113,11 +118,11 @@
       "type": "runtime"
     },
     {
-      "name": "serverless-http",
+      "name": "nanoid",
       "type": "runtime"
     },
     {
-      "name": "uuid",
+      "name": "serverless-http",
       "type": "runtime"
     }
   ],

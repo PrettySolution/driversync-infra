@@ -6,9 +6,13 @@ import {
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
+import { PutCommand, PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import ddbClient from '../config/dynamoDB';
+import { nanoid } from 'nanoid';
+import ddbClient, { docClient } from '../config/dynamoDB';
 import { Report, tableName } from '../models/reportModel';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+
 
 export interface IGetAllReportsWithPagination {
   ownerId: string;
@@ -20,23 +24,21 @@ class ReportService {
   private readonly tableName: string | undefined = tableName;
 
   // Create a new report
-  async createReport(reportData: {
-    ownerId: string;
-    type: string;
-  }): Promise<string> {
-    const report: Report = {
-      timestamp: Date.now().toString(),
-      ownerId: reportData.ownerId,
-      type: reportData.type,
+  async createReport(reportData: { ownerId: string; type: string }): Promise<string> {
+    const id = nanoid();
+    const report = {
+      pk: `REPORT#${id}`,
+      sk: `#${Date.now()}#VEHICLE#vehicle001#DRIVER#${reportData.ownerId}#REPORT#${id}`,
+      gsi1pk: `REPORT#${id}`,
+      data: { oil: 0, brake: 1, tair: 2 },
     };
-
     try {
-      const command = new PutItemCommand({
+      const command = new PutCommand({
         TableName: this.tableName,
-        Item: marshall(report),
+        Item: report,
       });
-      await ddbClient.send(command);
-      return report.timestamp; // Return the timestamp of the newly created report
+      await docClient.send(command);
+      return report.sk; // Return the timestamp of the newly created report
     } catch (error) {
       console.error('Error inserting report: ', error);
       throw new Error('Failed to create report');

@@ -5,7 +5,8 @@ import { driverFECheckoutStep } from './src/constants';
 
 
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.174.0',
+  cdkVersion: '2.177.0',
+  minNodeVersion: '22',
   defaultReleaseBranch: 'main',
   name: 'driversync-infra',
   projenrcTs: true,
@@ -22,8 +23,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'cdk-pipelines-github',
     'aws-cdk-github-oidc',
     '@types/aws-lambda',
-    '@aws-sdk/client-dynamodb',
-    'uuid',
+    '@aws-sdk/client-dynamodb', '@aws-sdk/lib-dynamodb',
+    // 'uuid',
+    'nanoid',
     '@aws-sdk/util-dynamodb',
     'express',
     'serverless-http',
@@ -49,7 +51,7 @@ project.addTask('cdk:dev', {
 });
 
 project.addTask('express:run', {
-  requiredEnv: ['AWS_PROFILE_REGION', 'REPORT_TABLE_NAME'],
+  requiredEnv: ['AWS_PROFILE_REGION', 'BASE_TABLE_NAME'],
   exec: 'npx nodemon src/stacks/api-gateway/api-lambda/server.ts',
   receiveArgs: true,
 });

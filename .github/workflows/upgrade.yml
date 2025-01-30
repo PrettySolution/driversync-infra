@@ -23,6 +23,10 @@ jobs:
           path: driversync-web
           ref: main
           token: ${{ secrets.PRETTY_READ_PAT }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: Upgrade dependencies
