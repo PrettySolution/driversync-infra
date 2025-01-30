@@ -6,11 +6,11 @@ import {
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
-import { PutCommand, PutCommandInput } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, PutCommandInput, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import ddbClient, { docClient } from '../config/dynamoDB';
-import { Report, tableName } from '../models/reportModel';
+import { Report, ReportProps, tableName } from '../models/reportModel';
 
 
 export interface IGetAllReportsWithPagination {
@@ -23,21 +23,46 @@ class ReportService {
   private readonly tableName: string | undefined = tableName;
 
   // Create a new report
-  async createReport(reportData: { ownerId: string; type: string }): Promise<string> {
+  async createReport(props: ReportProps): Promise<Record<string, any>> {
     const id = nanoid();
-    const report = {
-      pk: `REPORT#${id}`,
-      sk: `#${Date.now()}#VEHICLE#vehicle001#DRIVER#${reportData.ownerId}#REPORT#${id}`,
-      gsi1pk: `REPORT#${id}`,
-      data: { oil: 0, brake: 1, tair: 2 },
+
+    const report: Report = {
+      reportId: id,
+      vehicleId: props.vehicleId,
+      driverId: props.username,
+      checklist: { oil: 0, brake: 1, tair: 2 },
+      timestamp: Date.now(),
     };
+
+    const reportItem = {
+      pk: `REPORT#${report.reportId}`,
+      sk: `#${report.timestamp}#VEHICLE#${report.vehicleId}#DRIVER#${report.driverId}&REPORT#${report.reportId}`,
+      gsi1pk: 'REPORTS$',
+      data: report.checklist,
+    };
+    const reportsOfDriverItem = {
+      pk: `REPORT#${report.reportId}`,
+      sk: `DRIVER#${report.driverId}#${report.timestamp}&VEHICLE#${report.reportId}`,
+      gsi1pk: 'REPORTS|DRIVER$',
+    };
+    const reportsOfVehicleItem = {
+      pk: `VEHICLE#${report.reportId}`,
+      sk: `VEHICLE#${report.vehicleId}#${report.timestamp}&REPORT#${report.reportId}`,
+      gsi1pk: 'REPORTS|VEHICLE$',
+    };
+    const items = [reportItem, reportsOfDriverItem, reportsOfVehicleItem];
+
     try {
-      const command = new PutCommand({
-        TableName: this.tableName,
-        Item: report,
+      const cmd = new TransactWriteCommand({
+        TransactItems: items.map(item => ({
+          Put: { TableName: this.tableName, Item: item },
+        })),
       });
-      await docClient.send(command);
-      return report.sk; // Return the timestamp of the newly created report
+      await docClient.send(cmd);
+      console.log(JSON.stringify(report));
+
+      return report;
+
     } catch (error) {
       console.error('Error inserting report: ', error);
       throw new Error('Failed to create report');
@@ -148,7 +173,7 @@ class ReportService {
       // Extract LastEvaluatedKey if it exists
       let newLastEvaluatedKey: string | undefined;
       if (data.LastEvaluatedKey) {
-        const lastItem = unmarshall(data.LastEvaluatedKey) as Report;
+        const lastItem = unmarshall(data.LastEvaluatedKey) as any;
         newLastEvaluatedKey = lastItem.timestamp;
       }
 
