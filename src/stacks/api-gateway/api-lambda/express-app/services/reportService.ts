@@ -24,6 +24,12 @@ export enum GSI1PK {
   REPORTS_OF_VEHICLE = 'REPORTS|VEHICLE$',
 }
 
+export enum ENTITIES {
+  REPORT = 'REPORT',
+  DRIVER = 'DRIVER',
+  VEHICLE = 'VEHICLE',
+}
+
 class ReportService {
   private readonly tableName: string | undefined = tableName;
 
@@ -41,9 +47,9 @@ class ReportService {
       timestamp,
     };
 
-    const rawReportId = `REPORT#${report.reportId}`;
-    const rawDriverId = `DRIVER#${report.driverId}`;
-    const rawVehicleId = `VEHICLE#${report.vehicleId}`;
+    const rawReportId = `${ENTITIES.REPORT}#${report.reportId}`;
+    const rawDriverId = `${ENTITIES.DRIVER}#${report.driverId}`;
+    const rawVehicleId = `${ENTITIES.VEHICLE}#${report.vehicleId}`;
 
     const rawReportItem = {
       pk: rawReportId,
