@@ -13,7 +13,7 @@ POST {{host}}/api/reports?hello=world
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-{"type":"default"}
+{"vehicleId":"vehicle001"}
 
 ### update report
 PUT {{host}}/api/reports/1736697686488
