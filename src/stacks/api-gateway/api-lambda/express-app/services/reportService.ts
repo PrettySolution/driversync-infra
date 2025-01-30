@@ -11,7 +11,6 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import ddbClient, { docClient } from '../config/dynamoDB';
 import { Report, tableName } from '../models/reportModel';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 
 
 export interface IGetAllReportsWithPagination {
