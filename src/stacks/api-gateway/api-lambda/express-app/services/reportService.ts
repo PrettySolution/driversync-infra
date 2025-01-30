@@ -18,6 +18,12 @@ export interface IGetAllReportsWithPagination {
   lastEvaluatedKey?: string;
 }
 
+export enum GSI1PK {
+  REPORTS = 'REPORTS$',
+  REPORTS_OF_DRIVER = 'REPORTS|DRIVER$',
+  REPORTS_OF_VEHICLE = 'REPORTS|VEHICLE$',
+}
+
 class ReportService {
   private readonly tableName: string | undefined = tableName;
 
@@ -35,27 +41,27 @@ class ReportService {
       timestamp,
     };
 
-    const reportId = `REPORT#${id}`;
-    const driverId = `DRIVER#${report.driverId}`;
-    const vehicleId = `VEHICLE#${report.vehicleId}`;
+    const rawReportId = `REPORT#${report.reportId}`;
+    const rawDriverId = `DRIVER#${report.driverId}`;
+    const rawVehicleId = `VEHICLE#${report.vehicleId}`;
 
-    const reportItem = {
-      pk: reportId,
-      sk: `#${timestamp}#${vehicleId}#${driverId}&${reportId}`,
-      gsi1pk: 'REPORTS$',
+    const rawReportItem = {
+      pk: rawReportId,
+      sk: `#${timestamp}#${rawVehicleId}#${rawDriverId}&${rawReportId}`,
+      gsi1pk: GSI1PK.REPORTS,
       data: report.checklist,
     };
-    const reportsOfDriverItem = {
-      pk: reportId,
-      sk: `${driverId}#${timestamp}&${reportId}`,
-      gsi1pk: 'REPORTS|DRIVER$',
+    const rawReportsOfDriverItem = {
+      pk: rawReportId,
+      sk: `${rawDriverId}#${timestamp}&${rawReportId}`,
+      gsi1pk: GSI1PK.REPORTS_OF_DRIVER,
     };
-    const reportsOfVehicleItem = {
-      pk: reportId,
-      sk: `${vehicleId}#${timestamp}&${reportId}`,
-      gsi1pk: 'REPORTS|VEHICLE$',
+    const rawReportsOfVehicleItem = {
+      pk: rawReportId,
+      sk: `${rawVehicleId}#${timestamp}&${rawReportId}`,
+      gsi1pk: GSI1PK.REPORTS_OF_VEHICLE,
     };
-    const items = [reportItem, reportsOfDriverItem, reportsOfVehicleItem];
+    const items = [rawReportItem, rawReportsOfDriverItem, rawReportsOfVehicleItem];
 
     try {
       const cmd = new TransactWriteCommand({
