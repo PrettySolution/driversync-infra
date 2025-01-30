@@ -5,7 +5,7 @@ import { driverFECheckoutStep } from './src/constants';
 
 
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '2.174.0',
+  cdkVersion: '2.177.0',
   defaultReleaseBranch: 'main',
   name: 'driversync-infra',
   projenrcTs: true,
@@ -22,8 +22,9 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     'cdk-pipelines-github',
     'aws-cdk-github-oidc',
     '@types/aws-lambda',
-    '@aws-sdk/client-dynamodb',
-    'uuid',
+    '@aws-sdk/client-dynamodb', '@aws-sdk/lib-dynamodb',
+    // 'uuid',
+    'nanoid',
     '@aws-sdk/util-dynamodb',
     'express',
     'serverless-http',

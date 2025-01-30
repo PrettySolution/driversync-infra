@@ -47,15 +47,16 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.738.0",
+    "@aws-sdk/lib-dynamodb": "^3.738.0",
     "@aws-sdk/util-dynamodb": "^3.738.0",
     "@types/aws-lambda": "^8.10.147",
     "aws-cdk-github-oidc": "^2.4.1",
-    "aws-cdk-lib": "^2.174.0",
+    "aws-cdk-lib": "^2.177.0",
     "cdk-pipelines-github": "^0.4.128",
     "constructs": "^10.0.5",
     "express": "^4.21.2",
-    "serverless-http": "^3.2.0",
-    "uuid": "^11.0.5"
+    "nanoid": "^5.0.9",
+    "serverless-http": "^3.2.0"
   },
   "license": "Apache-2.0",
   "publishConfig": {
