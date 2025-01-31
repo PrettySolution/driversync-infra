@@ -88,27 +88,30 @@ export const getAllReports = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const username = req.requestContext.authorizer.jwt.claims.username;
+  const cognitoGroups = req.requestContext.authorizer.jwt.claims['cognito:groups'];
+  const cursor = req.query.cursor as string;
+  const last = req.query.last as string;
   const limit = parseInt(req.query.limit as string, 10) || 2;
-  const lastEvaluatedKey = req.query.cursor as string;
-  const ownerId = req.requestContext.authorizer.jwt.claims.username;
 
-  if (!ownerId) {
-    res.status(400).json({ message: 'Missing ownerId in request context' });
+  if (!username) {
+    res.status(400).json({ message: 'Missing username in request context' });
     return;
   }
 
   try {
-    const { items, lastEvaluatedKey: newLastEvaluatedKey } =
-            await ReportService.getAllReportsWithPagination({
-              ownerId,
-              limit,
-              lastEvaluatedKey,
-            });
+    const { items, lastEvaluatedKey } =
+      await ReportService.getAllReportsWithPagination({
+        driverId: username,
+        limit,
+        lastEvaluatedKey: { last, cursor },
+        cognitoGroups,
+      });
 
     res.status(200).json({
       items,
       limit,
-      lastEvaluatedKey: newLastEvaluatedKey,
+      lastEvaluatedKey,
     });
   } catch (error) {
     console.error(error);
