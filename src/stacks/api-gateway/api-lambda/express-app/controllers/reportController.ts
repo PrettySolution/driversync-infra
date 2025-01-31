@@ -89,7 +89,6 @@ export const getAllReports = async (
   res: Response,
 ): Promise<void> => {
   const username = req.requestContext.authorizer.jwt.claims.username;
-  const cognitoGroups = req.requestContext.authorizer.jwt.claims['cognito:groups'];
   const cursor = req.query.cursor as string;
   const last = req.query.last as string;
   const limit = parseInt(req.query.limit as string, 10) || 2;
@@ -105,7 +104,6 @@ export const getAllReports = async (
         driverId: username,
         limit,
         lastEvaluatedKey: { last, cursor },
-        cognitoGroups,
       });
 
     res.status(200).json({

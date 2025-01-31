@@ -1,5 +1,5 @@
 ### get reports (paginated)
-GET {{host}}/api/reports?cursor=1738340422669&last=lU45Z9VS8czk-jUI4_hn_
+GET {{host}}/api/reports?cursor=&last=
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

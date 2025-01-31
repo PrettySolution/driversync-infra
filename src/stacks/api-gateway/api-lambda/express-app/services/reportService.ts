@@ -26,7 +26,6 @@ export interface IGetAllReportsWithPagination {
   driverId: string;
   limit: number;
   lastEvaluatedKey: LastEvaluatedKey;
-  cognitoGroups: any;
 }
 
 export enum REPORTS_GSI1 {
@@ -183,20 +182,11 @@ class ReportService {
     driverId,
     limit = 2,
     lastEvaluatedKey,
-    cognitoGroups,
   }: IGetAllReportsWithPagination): Promise<{
       items: Report[];
       lastEvaluatedKey: LastEvaluatedKey;
     }> {
     try {
-
-      // Check if user is manager. Managers see all reports in the system
-      let isManager = false;
-      if (Array.isArray(cognitoGroups)) {
-        const groups = cognitoGroups as string[];
-        isManager = groups.includes('manager');
-      }
-
 
       // If cursor exists we want to set ExclusiveStartKey for infinite scrolling
       let exclusiveStartKey: any | undefined;
@@ -206,6 +196,7 @@ class ReportService {
           sk: `${ENTITIES.DRIVER}#${driverId}#${lastEvaluatedKey.cursor}&${ENTITIES.REPORT}#${lastEvaluatedKey.last}`,
           gsi1pk: REPORTS_GSI1.REPORTS_OF_DRIVER,
         };
+        console.log('exclusiveStartKey: ', exclusiveStartKey);
       }
 
       const params: QueryCommandInput = {
@@ -215,7 +206,7 @@ class ReportService {
         KeyConditionExpression: 'gsi1pk = :gsi1pkValue AND begins_with(sk, :skPrefix)',
         ExpressionAttributeValues: {
           ':gsi1pkValue': REPORTS_GSI1.REPORTS_OF_DRIVER,
-          ':skPrefix': `${ENTITIES.DRIVER}#${isManager ? '' : driverId}`,
+          ':skPrefix': `${ENTITIES.DRIVER}#${driverId}`,
         },
         Limit: limit,
         ExclusiveStartKey: exclusiveStartKey,
@@ -225,7 +216,7 @@ class ReportService {
       const data = await docClient.send(command);
       // console.log(JSON.stringify(data, null, 2));
 
-      // Handle newLastEvaluatedKey
+      // update lastEvaluatedKey if there is any. If not leave the old ones
       const newLastEvaluatedKey: LastEvaluatedKey = {};
       if (data.Count && data.Items) {
         const lastItem = data.Items[data.Items.length - 1].data as Report;
@@ -238,7 +229,6 @@ class ReportService {
       if (data.Items) {
         data.Items.forEach((i: any) => items.push(i.data as Report));
       }
-
       return { items, lastEvaluatedKey: newLastEvaluatedKey };
 
     } catch (error) {
