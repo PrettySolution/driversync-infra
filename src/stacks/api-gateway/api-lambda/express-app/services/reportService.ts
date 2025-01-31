@@ -1,61 +1,85 @@
 import {
   DeleteItemCommand,
   GetItemCommand,
-  QueryCommand,
   UpdateItemCommand,
   UpdateItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
-import { TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { QueryCommand, QueryCommandInput, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import ddbClient, { docClient } from '../config/dynamoDB';
-import { Report, ReportProps, tableName } from '../models/reportModel';
+import { Report, tableName } from '../models/reportModel';
 
+/**
+ * cursor is timestamp of last item
+ * last is the id of last item
+ * **/
+export interface LastEvaluatedKey {
+  cursor?: string;
+  last?: string;
+}
 
+/**
+ * IGetAllReportsWithPagination todo doc
+ */
 export interface IGetAllReportsWithPagination {
-  ownerId: string;
+  driverId: string;
   limit: number;
-  lastEvaluatedKey?: string;
+  lastEvaluatedKey: LastEvaluatedKey;
+}
+
+export enum REPORTS_GSI1 {
+  REPORTS = 'REPORTS$',
+  REPORTS_OF_DRIVER = 'REPORTS|DRIVER$',
+  REPORTS_OF_VEHICLE = 'REPORTS|VEHICLE$',
+}
+
+export enum ENTITIES {
+  REPORT = 'REPORT',
+  DRIVER = 'DRIVER',
+  VEHICLE = 'VEHICLE',
 }
 
 class ReportService {
   private readonly tableName: string | undefined = tableName;
 
   // Create a new report
-  async createReport(props: ReportProps): Promise<Report> {
+  async createReport(data: { vehicleId: string; username: string }): Promise<Report> {
 
     const id = nanoid();
     const timestamp = Date.now();
 
     const report: Report = {
       reportId: id,
-      vehicleId: props.vehicleId,
-      driverId: props.username,
-      checklist: { oil: 0, brake: 1, tair: 2 },
-      timestamp,
+      vehicleId: data.vehicleId,
+      driverId: data.username,
+      payload: { checklist: { oil: 0, brake: 1, tair: 2 }, note: 'this is a note' },
+      createdAt: timestamp,
     };
 
-    const reportId = `REPORT#${id}`;
-    const driverId = `DRIVER#${report.driverId}`;
-    const vehicleId = `VEHICLE#${report.vehicleId}`;
+    const rawReportId = `${ENTITIES.REPORT}#${report.reportId}`;
+    const rawDriverId = `${ENTITIES.DRIVER}#${report.driverId}`;
+    const rawVehicleId = `${ENTITIES.VEHICLE}#${report.vehicleId}`;
 
-    const reportItem = {
-      pk: reportId,
-      sk: `#${timestamp}#${vehicleId}#${driverId}&${reportId}`,
-      gsi1pk: 'REPORTS$',
-      data: report.checklist,
+    const rawReportItem = {
+      pk: rawReportId,
+      sk: `#${timestamp}#${rawVehicleId}#${rawDriverId}&${rawReportId}`,
+      gsi1pk: REPORTS_GSI1.REPORTS,
+      data: report,
     };
-    const reportsOfDriverItem = {
-      pk: reportId,
-      sk: `${driverId}#${timestamp}&${reportId}`,
-      gsi1pk: 'REPORTS|DRIVER$',
+    const rawReportsOfDriverItem = {
+      pk: rawReportId,
+      sk: `${rawDriverId}#${timestamp}&${rawReportId}`,
+      gsi1pk: REPORTS_GSI1.REPORTS_OF_DRIVER,
+      data: report,
     };
-    const reportsOfVehicleItem = {
-      pk: reportId,
-      sk: `${vehicleId}#${timestamp}&${reportId}`,
-      gsi1pk: 'REPORTS|VEHICLE$',
+    const rawReportsOfVehicleItem = {
+      pk: rawReportId,
+      sk: `${rawVehicleId}#${timestamp}&${rawReportId}`,
+      gsi1pk: REPORTS_GSI1.REPORTS_OF_VEHICLE,
+      data: report,
     };
-    const items = [reportItem, reportsOfDriverItem, reportsOfVehicleItem];
+    const items = [rawReportItem, rawReportsOfDriverItem, rawReportsOfVehicleItem];
 
     try {
       const cmd = new TransactWriteCommand({
@@ -147,53 +171,66 @@ class ReportService {
     }
   }
 
-  // Get all reports for a given ownerId with pagination
+  /**
+   * Get all reports for a given ownerId with pagination
+   * @param driverId is the DRIVER
+   * @param limit is a limit between 2 and 10
+   * @param lastEvaluatedKey todo doc
+   * @param cognitoGroups
+   */
   async getAllReportsWithPagination({
-    ownerId,
+    driverId,
     limit = 2,
     lastEvaluatedKey,
   }: IGetAllReportsWithPagination): Promise<{
       items: Report[];
-      lastEvaluatedKey?: string;
+      lastEvaluatedKey: LastEvaluatedKey;
     }> {
     try {
-      const params = {
+
+      // If cursor exists we want to set ExclusiveStartKey for infinite scrolling
+      let exclusiveStartKey: any | undefined;
+      if (lastEvaluatedKey.cursor) {
+        exclusiveStartKey = {
+          pk: `${ENTITIES.REPORT}#${lastEvaluatedKey.last}`,
+          sk: `${ENTITIES.DRIVER}#${driverId}#${lastEvaluatedKey.cursor}&${ENTITIES.REPORT}#${lastEvaluatedKey.last}`,
+          gsi1pk: REPORTS_GSI1.REPORTS_OF_DRIVER,
+        };
+        console.log('exclusiveStartKey: ', exclusiveStartKey);
+      }
+
+      const params: QueryCommandInput = {
         TableName: this.tableName,
-        KeyConditionExpression: 'ownerId = :ownerValue',
+        IndexName: 'gsi1pk-sk-index',
+        Select: 'ALL_ATTRIBUTES',
+        KeyConditionExpression: 'gsi1pk = :gsi1pkValue AND begins_with(sk, :skPrefix)',
         ExpressionAttributeValues: {
-          ':ownerValue': { S: ownerId },
+          ':gsi1pkValue': REPORTS_GSI1.REPORTS_OF_DRIVER,
+          ':skPrefix': `${ENTITIES.DRIVER}#${driverId}`,
         },
         Limit: limit,
-        ExclusiveStartKey: lastEvaluatedKey
-          ? marshall({
-            ownerId,
-            timestamp: lastEvaluatedKey,
-          })
-          : undefined,
+        ExclusiveStartKey: exclusiveStartKey,
       };
 
       const command = new QueryCommand(params);
-      const data = await ddbClient.send(command);
+      const data = await docClient.send(command);
+      // console.log(JSON.stringify(data, null, 2));
 
-      // Extract LastEvaluatedKey if it exists
-      let newLastEvaluatedKey: string | undefined;
-      if (data.LastEvaluatedKey) {
-        const lastItem = unmarshall(data.LastEvaluatedKey) as any;
-        newLastEvaluatedKey = lastItem.timestamp;
+      // update lastEvaluatedKey if there is any. If not leave the old ones
+      const newLastEvaluatedKey: LastEvaluatedKey = {};
+      if (data.Count && data.Items) {
+        const lastItem = data.Items[data.Items.length - 1].data as Report;
+        newLastEvaluatedKey.cursor = lastItem.createdAt.toString();
+        newLastEvaluatedKey.last = lastItem.reportId;
       }
 
-      // Convert items from DynamoDB response to usable format
+      // Convert items to usable format
       const items: Report[] = [];
       if (data.Items) {
-        data.Items.forEach((i: any) =>
-          items.push(unmarshall(i) as Report),
-        );
+        data.Items.forEach((i: any) => items.push(i.data as Report));
       }
+      return { items, lastEvaluatedKey: newLastEvaluatedKey };
 
-      return {
-        items,
-        lastEvaluatedKey: newLastEvaluatedKey,
-      };
     } catch (error) {
       console.error('Error fetching reports:', error);
       throw new Error('Unable to fetch reports');
