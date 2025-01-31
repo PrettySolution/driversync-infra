@@ -24,7 +24,10 @@ export class ApiGatewayStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiGatewayStackProps) {
     super(scope, id, props);
 
-    const baseTable = Table.fromTableName(this, 'baseTable', StringParameter.valueForStringParameter(this, TABLES.BASE_TABLE_PARAMETER_NAME));
+    const baseTable = Table.fromTableAttributes(this, 'baseTable', {
+      tableName: StringParameter.valueForStringParameter(this, TABLES.BASE_TABLE_PARAMETER_NAME),
+      globalIndexes: ['gsi1pk-sk-index'],
+    });
     const userPool = UserPool.fromUserPoolId(this, 'userPool', props.env.frontend.VITE_COGNITO_AUTHORITY.split('/').pop()!);
     const userPoolClient = UserPoolClient.fromUserPoolClientId(this, 'userPoolClient', props.env.frontend.VITE_COGNITO_CLIENT_ID);
 
