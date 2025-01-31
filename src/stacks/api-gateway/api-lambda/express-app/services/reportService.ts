@@ -9,7 +9,7 @@ import { TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import ddbClient, { docClient } from '../config/dynamoDB';
-import { Report, ReportProps, tableName } from '../models/reportModel';
+import { Report, tableName } from '../models/reportModel';
 
 
 export interface IGetAllReportsWithPagination {
@@ -34,17 +34,17 @@ class ReportService {
   private readonly tableName: string | undefined = tableName;
 
   // Create a new report
-  async createReport(props: ReportProps): Promise<Report> {
+  async createReport(data: { vehicleId: string; username: string }): Promise<Report> {
 
     const id = nanoid();
     const timestamp = Date.now();
 
     const report: Report = {
       reportId: id,
-      vehicleId: props.vehicleId,
-      driverId: props.username,
-      checklist: { oil: 0, brake: 1, tair: 2 },
-      timestamp,
+      vehicleId: data.vehicleId,
+      driverId: data.username,
+      payload: { checklist: { oil: 0, brake: 1, tair: 2 }, note: 'this is a note' },
+      createdAt: timestamp,
     };
 
     const rawReportId = `${ENTITIES.REPORT}#${report.reportId}`;
@@ -55,7 +55,7 @@ class ReportService {
       pk: rawReportId,
       sk: `#${timestamp}#${rawVehicleId}#${rawDriverId}&${rawReportId}`,
       gsi1pk: REPORTS_GSI1.REPORTS,
-      data: report.checklist,
+      data: report,
     };
     const rawReportsOfDriverItem = {
       pk: rawReportId,
