@@ -8,7 +8,7 @@ export const createReport = async (
 ): Promise<void> => {
   try {
     const username = req.requestContext.authorizer.jwt.claims.username;
-    const vehicleId = "vehicle001";
+    const vehicleId = 'vehicle001';
     const checklist = req.body;
     const data = await ReportService.createReport({ username, vehicleId, checklist });
 
