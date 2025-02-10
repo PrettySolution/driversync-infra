@@ -8,9 +8,9 @@ export const createReport = async (
 ): Promise<void> => {
   try {
     const username = req.requestContext.authorizer.jwt.claims.username;
-    const { vehicleId } = req.body;
-
-    const data = await ReportService.createReport({ username, vehicleId });
+    const vehicleId = "vehicle001";
+    const checklist = req.body;
+    const data = await ReportService.createReport({ username, vehicleId, checklist });
 
     res.json({ msg: 'OK', data: data });
   } catch (error) {
@@ -92,6 +92,7 @@ export const getAllReports = async (
   const cursor = req.query.cursor as string;
   const last = req.query.last as string;
   const limit = parseInt(req.query.limit as string, 10) || 2;
+  const all = parseInt(req.query.all as string, 10);
 
   if (!username) {
     res.status(400).json({ message: 'Missing username in request context' });
@@ -100,10 +101,11 @@ export const getAllReports = async (
 
   try {
     const { items, lastEvaluatedKey } =
-      await ReportService.getAllReportsWithPagination({
+      await ReportService.getAllReports({
         driverId: username,
         limit,
         lastEvaluatedKey: { last, cursor },
+        all,
       });
 
     res.status(200).json({

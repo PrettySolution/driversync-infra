@@ -1,9 +1,10 @@
-export const tableName = process.env.BASE_TABLE_NAME;
+export const tableName = "dev-DynamoDBStack-Base93336DB5-OJV0MDR988IA";
+// export const tableName = process.env.BASE_TABLE_NAME;
 
-interface ReportChecklist {
+export interface ReportChecklist {
   checklist: {
-    [name: string]: number;
-  };
+    [name: string]: boolean;
+  }[];
 }
 
 interface Note {
@@ -18,5 +19,5 @@ export interface Report {
   vehicleId: string;
   driverId: string;
   createdAt: number;
-  payload: ReportChecklist|Note;
+  payload: ReportChecklist;
 }

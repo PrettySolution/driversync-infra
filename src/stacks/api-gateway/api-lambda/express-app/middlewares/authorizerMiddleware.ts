@@ -6,7 +6,6 @@ export function authorizerMiddleware(req: Request, res: Response, next: NextFunc
     console.log('ERROR: Authorizer middleware should not be applied in PROD');
     const claims = decodeJwtPayload(req.headers.authorization);
     req.requestContext = { authorizer: { jwt: { claims } } };
-    console.log(req.requestContext);
   }
   next();
 }
