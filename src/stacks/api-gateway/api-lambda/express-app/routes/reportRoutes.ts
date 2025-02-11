@@ -10,7 +10,10 @@ import {
 const router = express.Router();
 
 // Routes for creating and fetching reports
-router.route('/').post(createReport).get(getAllReports);
+router
+  .route('/')
+  .post(createReport)
+  .get(getAllReports);
 
 // Routes for report operations (get, update, delete)
 router

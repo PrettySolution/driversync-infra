@@ -8,7 +8,7 @@ import { QueryCommand, QueryCommandInput, TransactWriteCommand } from '@aws-sdk/
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import ddbClient, { docClient } from '../config/dynamoDB';
-import { Report, tableName } from '../models/reportModel';
+import { Report, tableName, ReportChecklist } from '../models/reportModel';
 
 /**
  * cursor is timestamp of last item
@@ -20,12 +20,13 @@ export interface LastEvaluatedKey {
 }
 
 /**
- * IGetAllReportsWithPagination todo doc
+ * IGetAllReports todo doc
  */
-export interface IGetAllReportsWithPagination {
+export interface IGetAllReports {
   driverId: string;
   limit: number;
   lastEvaluatedKey: LastEvaluatedKey;
+  all: number;
 }
 
 export enum REPORTS_GSI1 {
@@ -44,7 +45,7 @@ class ReportService {
   private readonly tableName: string | undefined = tableName;
 
   // Create a new report
-  async createReport(data: { vehicleId: string; username: string }): Promise<Report> {
+  async createReport(data: { vehicleId: string; username: string; checklist: ReportChecklist }): Promise<Report> {
 
     const id = nanoid();
     const timestamp = Date.now();
@@ -53,7 +54,7 @@ class ReportService {
       reportId: id,
       vehicleId: data.vehicleId,
       driverId: data.username,
-      payload: { checklist: { oil: 0, brake: 1, tair: 2 }, note: 'this is a note' },
+      payload: data.checklist,
       createdAt: timestamp,
     };
 
@@ -173,48 +174,65 @@ class ReportService {
 
   /**
    * Get all reports for a given ownerId with pagination
-   * @param driverId is the DRIVER
    * @param limit is a limit between 2 and 10
    * @param lastEvaluatedKey todo doc
    * @param cognitoGroups
    */
-  async getAllReportsWithPagination({
+  async getAllReports({
     driverId,
     limit = 2,
     lastEvaluatedKey,
-  }: IGetAllReportsWithPagination): Promise<{
+    all,
+  }: IGetAllReports): Promise<{
       items: Report[];
       lastEvaluatedKey: LastEvaluatedKey;
     }> {
     try {
-
       // If cursor exists we want to set ExclusiveStartKey for infinite scrolling
       let exclusiveStartKey: any | undefined;
-      if (lastEvaluatedKey.cursor) {
+      if (lastEvaluatedKey.cursor && all) {
+        exclusiveStartKey = {
+          pk: `${ENTITIES.REPORT}#${lastEvaluatedKey.last}`,
+          sk: `#${lastEvaluatedKey.cursor}`,
+          gsi1pk: REPORTS_GSI1.REPORTS,
+        };
+      } else if (lastEvaluatedKey.cursor && !all) {
         exclusiveStartKey = {
           pk: `${ENTITIES.REPORT}#${lastEvaluatedKey.last}`,
           sk: `${ENTITIES.DRIVER}#${driverId}#${lastEvaluatedKey.cursor}&${ENTITIES.REPORT}#${lastEvaluatedKey.last}`,
           gsi1pk: REPORTS_GSI1.REPORTS_OF_DRIVER,
         };
-        console.log('exclusiveStartKey: ', exclusiveStartKey);
+      }
+
+      let keyConditionExpression = '';
+      let expressionAttributeValues = {};
+
+      if (all) {
+        keyConditionExpression = 'gsi1pk = :gsi1pkValue';
+        expressionAttributeValues = {
+          ':gsi1pkValue': REPORTS_GSI1.REPORTS,
+        };
+      } else if (!all) {
+        keyConditionExpression = 'gsi1pk = :gsi1pkValue AND begins_with(sk, :skPrefix)';
+        expressionAttributeValues = {
+          ':gsi1pkValue': REPORTS_GSI1.REPORTS_OF_DRIVER,
+          ':skPrefix': `${ENTITIES.DRIVER}#${driverId}`,
+        };
       }
 
       const params: QueryCommandInput = {
         TableName: this.tableName,
         IndexName: 'gsi1pk-sk-index',
         Select: 'ALL_ATTRIBUTES',
-        KeyConditionExpression: 'gsi1pk = :gsi1pkValue AND begins_with(sk, :skPrefix)',
-        ExpressionAttributeValues: {
-          ':gsi1pkValue': REPORTS_GSI1.REPORTS_OF_DRIVER,
-          ':skPrefix': `${ENTITIES.DRIVER}#${driverId}`,
-        },
+        KeyConditionExpression: keyConditionExpression,
+        ExpressionAttributeValues: expressionAttributeValues,
         Limit: limit,
         ExclusiveStartKey: exclusiveStartKey,
+        ScanIndexForward: false,
       };
 
       const command = new QueryCommand(params);
       const data = await docClient.send(command);
-      // console.log(JSON.stringify(data, null, 2));
 
       // update lastEvaluatedKey if there is any. If not leave the old ones
       const newLastEvaluatedKey: LastEvaluatedKey = {};
@@ -236,6 +254,7 @@ class ReportService {
       throw new Error('Unable to fetch reports');
     }
   }
+
 }
 
 export default new ReportService();
