@@ -1,5 +1,4 @@
-// export const tableName = process.env.BASE_TABLE_NAME;
-export const tableName = 'dev-DynamoDBStack-Base93336DB5-OJV0MDR988IA';
+export const tableName = process.env.BASE_TABLE_NAME || "dev-DynamoDBStack-Base93336DB5-OJV0MDR988IA";
 
 export interface ReportChecklist {
   checklist: {
