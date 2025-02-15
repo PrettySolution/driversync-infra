@@ -1,5 +1,5 @@
-import { DriverService } from "../services/driverService";
 import { Request, Response } from 'express';
+import { DriverService } from '../services/driverService';
 
 export class DriverController {
   private driverService: DriverService;

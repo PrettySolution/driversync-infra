@@ -1,6 +1,6 @@
-import { PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
-import { docClient } from "../config/dynamoDB";
-import { nanoid } from "nanoid";
+import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { nanoid } from 'nanoid';
+import { docClient } from '../config/dynamoDB';
 
 export class VehicleModel {
   private tableName: string;
@@ -17,7 +17,7 @@ export class VehicleModel {
       Item: {
         pk: `VEHICLE#${vehicleId}`,
         sk: 'METADATA',
-        gsi1pk: `VEHICLES$`,
+        gsi1pk: 'VEHICLES$',
         data: {
           vehicleId,
           status: 'available',
@@ -25,8 +25,8 @@ export class VehicleModel {
           model,
           plate,
           odometer,
-        }
-      }
+        },
+      },
     };
 
     try {
@@ -45,8 +45,8 @@ export class VehicleModel {
       IndexName: 'gsi1pk-sk-index',
       KeyConditionExpression: 'gsi1pk = :vehiclePrefix',
       ExpressionAttributeValues: {
-        ':vehiclePrefix': 'VEHICLES$'
-      }
+        ':vehiclePrefix': 'VEHICLES$',
+      },
     };
 
     try {

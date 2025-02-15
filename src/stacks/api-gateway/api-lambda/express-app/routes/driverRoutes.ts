@@ -1,11 +1,11 @@
-import { Router } from "express";
-import { DriverController } from "../controllers/driverController";
+import { Router } from 'express';
+import { DriverController } from '../controllers/driverController';
 
 const router = Router();
 
 class DriverRoutes {
   private driverController: DriverController;
-  
+
   constructor(tableName: string) {
     this.driverController = new DriverController(tableName);
   }

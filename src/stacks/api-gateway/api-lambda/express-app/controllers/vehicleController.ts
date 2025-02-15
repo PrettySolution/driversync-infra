@@ -1,5 +1,5 @@
-import { VehicleService } from '../services/vehicleService';
 import { Request, Response } from 'express';
+import { VehicleService } from '../services/vehicleService';
 
 export class VehicleController {
   private vehicleService: VehicleService;

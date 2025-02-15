@@ -1,7 +1,7 @@
-import { GetItemCommand } from "@aws-sdk/client-dynamodb";
-import { docClient } from "../config/dynamoDB";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
+import { GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import { docClient } from '../config/dynamoDB';
 
 export class DriverModel {
   private tableName: string;
@@ -16,7 +16,7 @@ export class DriverModel {
       Key: marshall({
         pk: `DRIVER#${driverId}`,
         sk: `DRIVER_NAME#${name}`,
-      })
+      }),
     };
 
     const command = new GetItemCommand(checkParams);
@@ -35,9 +35,9 @@ export class DriverModel {
         data: {
           driverId,
           name,
-          assignedVehicleId: null
-        }
-      }
+          assignedVehicleId: null,
+        },
+      },
     };
 
     try {

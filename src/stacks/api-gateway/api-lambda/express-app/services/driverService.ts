@@ -1,4 +1,4 @@
-import { DriverModel } from "../models/driverModel";
+import { DriverModel } from '../models/driverModel';
 
 export class DriverService {
   private driverModel: DriverModel;
