@@ -5,7 +5,9 @@ import {
 import express from 'express';
 import { authorizerMiddleware } from './middlewares/authorizerMiddleware';
 import { loggerMiddleware } from './middlewares/loggerMiddleware';
+import driverRoutes from './routes/driverRoutes';
 import reportRoutes from './routes/reportRoutes';
+import vehicleRoutes from './routes/vehicleRoutes';
 
 interface IRequestContext {
   authorizer: {
@@ -28,6 +30,8 @@ app.use(authorizerMiddleware);
 
 // routes
 app.use('/api/reports', reportRoutes);
+app.use('/api', vehicleRoutes(process.env.BASE_TABLE_NAME || 'dev-DynamoDBStack-Base93336DB5-OJV0MDR988IA'));
+app.use('/api', driverRoutes(process.env.BASE_TABLE_NAME || 'dev-DynamoDBStack-Base93336DB5-OJV0MDR988IA'));
 app.route('/api/reports/debug').all((req, res) => {
   res.json({
     body: req.body,
