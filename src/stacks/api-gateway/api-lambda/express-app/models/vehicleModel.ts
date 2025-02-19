@@ -1,8 +1,8 @@
+import { UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { marshall } from '@aws-sdk/util-dynamodb';
 import { nanoid } from 'nanoid';
 import { docClient } from '../config/dynamoDB';
-import { UpdateItemCommand } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
 
 export class VehicleModel {
   private tableName: string;
@@ -69,18 +69,18 @@ export class VehicleModel {
         TableName: this.tableName,
         Key: marshall({
           pk: `VEHICLE#${vehicleId}`,
-          sk: 'METADATA'
+          sk: 'METADATA',
         }),
         UpdateExpression: 'SET #data.#status = :assigned, #data.#assignedDriverId = :driverId',
         ExpressionAttributeNames: {
           '#data': 'data',
           '#status': 'status',
-          '#assignedDriverId': 'assignedDriverId'
+          '#assignedDriverId': 'assignedDriverId',
         },
         ExpressionAttributeValues: marshall({
           ':assigned': 'assigned',
-          ':driverId': driverId
-        })
+          ':driverId': driverId,
+        }),
       };
 
       const vehicleCommand = new UpdateItemCommand(updateVehicleParams);
@@ -91,16 +91,16 @@ export class VehicleModel {
         TableName: this.tableName,
         Key: marshall({
           pk: `DRIVER#${driverId}`,
-          sk: 'DRIVER#'
+          sk: 'DRIVER#',
         }),
         UpdateExpression: 'SET #data.#assignedVehicleId = :vehicleId',
         ExpressionAttributeNames: {
           '#data': 'data',
-          '#assignedVehicleId': 'assignedVehicleId'
+          '#assignedVehicleId': 'assignedVehicleId',
         },
         ExpressionAttributeValues: marshall({
-          ':vehicleId': vehicleId
-        })
+          ':vehicleId': vehicleId,
+        }),
       };
 
       const driverCommand = new UpdateItemCommand(updateDriverParams);
