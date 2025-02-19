@@ -1,5 +1,5 @@
 import { GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { docClient } from '../config/dynamoDB';
 
@@ -15,7 +15,7 @@ export class DriverModel {
       TableName: this.tableName,
       Key: marshall({
         pk: `DRIVER#${driverId}`,
-        sk: `DRIVER_NAME#${name}`,
+        sk: `DRIVER#${name}`,
       }),
     };
 
@@ -30,7 +30,7 @@ export class DriverModel {
       TableName: this.tableName,
       Item: {
         pk: `DRIVER#${driverId}`,
-        sk: `DRIVER_NAME#${name}`,
+        sk: `DRIVER#${name}`,
         gsi1pk: 'DRIVERS$',
         data: {
           driverId,
@@ -46,6 +46,26 @@ export class DriverModel {
     } catch (error) {
       console.error('Error inserting driver: ', error);
       throw new Error('Failed to create driver');
+    }
+  }
+
+  async listDrivers(): Promise<any[] | undefined> {
+    const params = {
+      TableName: this.tableName,
+      IndexName: 'gsi1pk-sk-index',
+      KeyConditionExpression: 'gsi1pk = :driverPrefix',
+      ExpressionAttributeValues: {
+        ':driverPrefix': 'DRIVERS$',
+      },
+    };
+
+    try {
+      const command = new QueryCommand(params);
+      const data = await docClient.send(command);
+      return data.Items?.map(item => item.data);
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      throw new Error('Unable to fetch reports');
     }
   }
 }
