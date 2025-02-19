@@ -11,6 +11,7 @@ class DriverRoutes {
   }
 
   public routes(): Router {
+    router.get('/drivers', this.driverController.listDrivers.bind(this.driverController));
     router.post('/drivers', this.driverController.createDriver.bind(this.driverController));
     return router;
   }
