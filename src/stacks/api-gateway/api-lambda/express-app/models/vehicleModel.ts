@@ -60,7 +60,7 @@ export class VehicleModel {
       throw new Error('Unable to fetch reports');
     }
   }
-  
+
   // Assign a vehicle to a driver using transactions, including releasing the previous vehicle
   async assignVehicleToDriver(vehicleId: string, driverId: string, driverName: string): Promise<void> {
     try {
@@ -179,7 +179,7 @@ export class VehicleModel {
                 ':vehicleId': vehicleId,
               }),
             },
-          }
+          },
         );
       } else {
         // Step 5: If no new vehicleId is provided, clear the assignedVehicleId for the driver
