@@ -12,6 +12,7 @@ class VehicleRoutes {
 
   public routes(): Router {
     router.get('/vehicles', this.vehicleController.listVehicles.bind(this.vehicleController));
+    router.post('/assign-vehicle', this.vehicleController.assignVehicleToDriver.bind(this.vehicleController));
     // router.get('/vehicles/:vehicleId', this.vehicleController.getVehicleById.bind(this.vehicleController));
     router.post('/vehicles', this.vehicleController.createVehicle.bind(this.vehicleController));
     return router;

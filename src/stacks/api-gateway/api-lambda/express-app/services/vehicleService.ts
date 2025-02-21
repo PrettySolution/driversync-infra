@@ -16,4 +16,9 @@ export class VehicleService {
   async listVehicles(): Promise<any[] | undefined> {
     return this.vehicleModel.listVehicles();
   }
+
+  // Assign a vehicle to a driver
+  async assignVehicleToDriver(vehicleId: string, driverId: string, driverName: string): Promise<void> {
+    return this.vehicleModel.assignVehicleToDriver(vehicleId, driverId, driverName);
+  }
 }

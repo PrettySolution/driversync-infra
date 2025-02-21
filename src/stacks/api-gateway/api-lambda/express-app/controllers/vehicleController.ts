@@ -30,4 +30,16 @@ export class VehicleController {
       res.status(500).json({ error: 'Failed to fetch vehicles' });
     }
   }
+
+  // Assign a vehicle to a driver
+  async assignVehicleToDriver(req: Request, res: Response): Promise<void> {
+    const { vehicleId, driverId, driverName } = req.body;
+
+    try {
+      await this.vehicleService.assignVehicleToDriver(vehicleId, driverId, driverName);
+      res.status(200).json({ message: 'Vehicle assigned successfully', vehicleId, driverId });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to assign vehicle' });
+    }
+  }
 }
