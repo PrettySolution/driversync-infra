@@ -35,7 +35,7 @@ export class DriverModel {
         data: {
           driverId,
           name,
-          assignedVehicleId: null,
+          assignedVehicleId: '',
         },
       },
     };
