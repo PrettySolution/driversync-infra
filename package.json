@@ -46,9 +46,9 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.774.0",
-    "@aws-sdk/lib-dynamodb": "^3.774.0",
-    "@aws-sdk/util-dynamodb": "^3.774.0",
+    "@aws-sdk/client-dynamodb": "^3.775.0",
+    "@aws-sdk/lib-dynamodb": "^3.775.0",
+    "@aws-sdk/util-dynamodb": "^3.775.0",
     "@types/aws-lambda": "^8.10.148",
     "aws-cdk-github-oidc": "^2.4.1",
     "aws-cdk-lib": "^2.177.0",
