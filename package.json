@@ -52,7 +52,7 @@
     "@types/aws-lambda": "^8.10.148",
     "aws-cdk-github-oidc": "^2.4.1",
     "aws-cdk-lib": "^2.177.0",
-    "cdk-pipelines-github": "^0.4.128",
+    "cdk-pipelines-github": "^0.4.129",
     "constructs": "^10.0.5",
     "express": "^4.21.2",
     "nanoid": "^5.1.5",
