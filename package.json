@@ -34,7 +34,7 @@
     "@typescript-eslint/parser": "^8",
     "aws-cdk": "^2",
     "cdk-dia": "^0.12.1",
-    "esbuild": "^0.25.10",
+    "esbuild": "^0.25.11",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^3.10.1",
     "eslint-plugin-import": "^2.32.0",
@@ -46,10 +46,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.910.0",
-    "@aws-sdk/lib-dynamodb": "^3.910.0",
-    "@aws-sdk/util-dynamodb": "^3.910.0",
-    "@types/aws-lambda": "^8.10.155",
+    "@aws-sdk/client-dynamodb": "^3.911.0",
+    "@aws-sdk/lib-dynamodb": "^3.911.0",
+    "@aws-sdk/util-dynamodb": "^3.911.0",
+    "@types/aws-lambda": "^8.10.156",
     "aws-cdk-github-oidc": "^2.4.1",
     "aws-cdk-lib": "^2.177.0",
     "cdk-pipelines-github": "^0.4.132",
