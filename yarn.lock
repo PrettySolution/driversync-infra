@@ -66,10 +66,10 @@
     "@smithy/util-utf8" "^2.0.0"
     tslib "^2.6.2"
 
-"@aws-sdk/client-dynamodb@^3.999.0":
-  version "3.999.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.999.0.tgz#20aef34051e5a0bb0fa5f4a6bee938570860086c"
-  integrity sha512-DbFR7Y4KQ6HUgt9QcKyx1XvBgz2JJP5JWApL4o1oxyYJaHwAazqKq+QtidOhGNVkaCMoQv70NrrUFwZXf3ArNQ==
+"@aws-sdk/client-dynamodb@^3.1000.0":
+  version "3.1000.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.1000.0.tgz#ef65f43ffd92e53be92ecebd1e00accc5875e8cb"
+  integrity sha512-S0M9ndVgGiupQEX9M6yLIKx2Iw1Z/lnZR1j5guuR76sqteQM6jsQseTJepq0hJ9SGGpzSwMucYJxETQDHsgFhQ==
   dependencies:
     "@aws-crypto/sha256-browser" "5.2.0"
     "@aws-crypto/sha256-js" "5.2.0"
@@ -271,10 +271,10 @@
     mnemonist "0.38.3"
     tslib "^2.6.2"
 
-"@aws-sdk/lib-dynamodb@^3.999.0":
-  version "3.999.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.999.0.tgz#5bc4a228aee6f0232721c7763d754a71ae50c4dd"
-  integrity sha512-chwf1EKzHR51sDd+eURMeHhpdrDW/bkTgFcJKCp4EdbyBhBb24GWnCD0edHsX2oEF3f/4VkwKxWsANVcGXxooQ==
+"@aws-sdk/lib-dynamodb@^3.1000.0":
+  version "3.1000.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.1000.0.tgz#7b6da1975396adb414231ea7c23634e3f6c8d488"
+  integrity sha512-iS7cL3lZXxNQMkSnxHvAchZUzbnn06XPmUtTAqwZJQpKI26ZQDespiW8yBh+YIrGNMGV2pWlG3HYQodV8uYRqg==
   dependencies:
     "@aws-sdk/core" "^3.973.15"
     "@aws-sdk/util-dynamodb" "^3.996.1"
@@ -2527,9 +2527,9 @@ brace-expansion@^1.1.7:
     concat-map "0.0.1"
 
 brace-expansion@^5.0.2:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.3.tgz#6a9c6c268f85b53959ec527aeafe0f7300258eef"
-  integrity sha512-fy6KJm2RawA5RcHkLa1z/ScpBeA762UF9KmZQxwIbDtRJrgLzM10depAiEQ+CXYcoiqW1/m96OAAoke2nE9EeA==
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-5.0.4.tgz#614daaecd0a688f660bbbc909a8748c3d80d4336"
+  integrity sha512-h+DEnpVvxmfVefa4jFbCf5HdH5YMDXRsmKflpf1pILZWRFlTbJpxeU55nJl4Smt5HQaGzg1o6RHFPJaOqnmBDg==
   dependencies:
     balanced-match "^4.0.2"
 
