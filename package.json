@@ -55,7 +55,7 @@
     "cdk-pipelines-github": "^0.4.133",
     "constructs": "^10.5.1",
     "express": "^4.22.1",
-    "nanoid": "^5.1.6",
+    "nanoid": "^5.1.7",
     "serverless-http": "^3.2.0"
   },
   "engines": {
