@@ -26,6 +26,12 @@
     "strictPropertyInitialization": false,
     "stripInternal": true,
     "target": "ES2022",
+    "types": [
+      "express",
+      "jest",
+      "node",
+      "aws-lambda"
+    ],
     "moduleResolution": "nodenext",
     "typeRoots": [
       "./node_modules/@types"
